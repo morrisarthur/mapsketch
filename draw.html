@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<title>Map-based EH Docs - Whatcom </title>
+    <style>
+      /* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+
+      #map_canvas {
+        height: 100%;
+      }
+      /* Optional: Makes the sample page fill the window. */
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      .controls {
+        margin-top: 10px;
+        border: 1px solid transparent;
+        border-radius: 2px 0 0 2px;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        height: 32px;
+        outline: none;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+      }
+
+
+
+      .pac-container {
+        font-family: Roboto;
+      }
+
+      #type-selector {
+        color: #fff;
+        background-color: #4d90fe;
+        padding: 5px 11px 0px 11px;
+      }
+
+      #type-selector label {
+        font-family: Roboto;
+        font-size: 13px;
+        font-weight: 300;
+      }
+      #target {
+        width: 345px;
+      }
+    </style>
+	
+
+
+</head>
+
+<body>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h5 class="modal-title" id="modtitle">GeoShapes</h5>
+        </div>
+        <div id="mod-input" class="modal-body">
+		<form>
+          <select name="geoShapeTag" id="gtag">
+		  <option value="Drainfield">Drainfield</option>
+		  <option value="Building served by OSS">Building served by OSS</option>
+		  <option value="Other Building">Other Building</option>
+		  <option value="Impervious Area">Impervious Area</option>
+		  <option value="Septic Tank">Septic Tank</option>
+		  <option value="Distribution Box">Distribution Box</option>
+		  <option value="Control Panel">Control Panel</option>
+		  <option value="Pump Tank">Pump Tank</option>
+
+		</select><br>
+		Location Notes: <br>
+				<input type="text" id="gdetails" name="details"><br>
+		
+		  </form>
+        </div>
+        <div class="modal-footer">
+		<div style="float:Left">
+		<button id="remove_btn" type="button" class="btn btn-default" data-dismiss="modal">Remove</button>
+		</div>
+		<div style="float:Right">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+		</div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+
+
+
+<div id="map_canvas" class="map"> </div>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDy0O2hjT2-qZe2klgq_wa3Pm6PLFhZMbM&libraries=geometry&v=3"></script>
+
+<script type="text/javascript">
+
+google.load('visualization', '1', {
+  'packages': ['corechart', 'table', 'geomap']
+});
+
+var globeterm = "";
+var globevertices = [];
+var polyCaption = [];
+var markerCaption = [];
+var geoLocateMarker = new google.maps.Marker();
+var geoLocateCircle = new google.maps.Circle();
+// tpolygon Fusion Table on wchddata
+var FT_TableID = "1wUquUQoL6PgAbqysRWwCPYf6_tWD9NtEWYJ1KD-e"; 
+var FTGeof_TableID = "1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q";
+var layer = null;
+var geoString = '';
+var gGeo;
+var polyObj;
+var infoWindow2 = new google.maps.InfoWindow;
+var watchID;
+var geoLoc;
+var pevent;
+var pSiteID;
+var pP12;
+var listenerAddFeature;
+
+google.maps.event.addDomListener(window, 'load', initialize);
+
+function initialize() {
+//Setup of default map
+map = new google.maps.Map(document.getElementById('map_canvas'), {
+	center: new google.maps.LatLng(48.780368, -122.481393),
+	zoom: 16,
+	scrollwheel: true,
+	mapTypeControl: false,
+	streetViewControl: false,
+	overviewMapControl: true,
+	mapTypeId: 'hybrid',
+	zoomControl: true,
+	zoomControlOptions: {
+	  style: google.maps.ZoomControlStyle.SMALL
+	},
+});
+
+///Default to top-down view
+map.setTilt(0);
+
+
+// Get URL parameter
+pP12 = getAllUrlParams().p;
+pSiteID = getAllUrlParams().s;
+
+map.data.setStyle();
+map.data.setControls(['Point', 'LineString', 'Polygon']);
+map.data.setControlPosition(google.maps.ControlPosition.TOP_CENTER);
+map.data.setStyle( {
+//	icon: 'https://http://maps.google.com/mapfiles/kml/pal3/icon61.png',
+	editable: true,
+	icon: {
+            path: google.maps.SymbolPath.CIRCLE,
+            scale: 5,
+			strokeColor: '#ffff00'
+			
+          },
+    fillColor: '#ffff00',
+    strokeColor: '#ffff00',
+    strokeWeight: 4,
+	fillOpacity: 0.2,
+	strokeOpacity: 0.5
+  });
+  
+$(document).on("click", "#remove_btn", function(event){
+    map.data.remove(pevent.feature); 
+});
+
+//function setProperties(pevent) { 
+$('#myModal').on('hidden.bs.modal', function () {
+pevent.feature.setProperty('siteid', pSiteID)
+pevent.feature.setProperty('tag', document.getElementById('gtag').value);
+pevent.feature.setProperty('caption', document.getElementById('gdetails').value);
+//console.log(pevent.feature.getGeometry().getType() + ': ' + pevent.feature.getProperty('tag'));
+})
+//}
+
+listenerAddFeature = map.data.addListener('addfeature', function(event) {
+	pevent = event;
+	document.getElementById('gtag').value = "";
+	document.getElementById('gdetails').value = ""
+	var gType = event.feature.getGeometry().getType();
+	if (gType == "Point") {
+		$('#gtag').empty().append('<option value="">---Select Tag---</option>');
+		$('#gtag').append('<option value="Septic Tank">Septic Tank</option>');
+		$('#gtag').append('<option value="Distribution Box">Distribution Box</option>');
+
+//		setProperties(event);
+		// open dialog to prompt for properties
+		document.getElementById('modtitle').innerHTML = "SiteID: " + pSiteID;
+		$("#myModal").modal({show: true, backdrop: "static"});
+	}
+	else if (gType == "Polygon") {
+		$('#gtag').empty().append('<option value="">---Select Tag---</option>');
+		$('#gtag').append('<option value="Drainfield">Drainfield</option>');
+		$('#gtag').append('<option value="Building/Connection">Building/Connection</option>');
+		$('#gtag').append('<option value="Other Building">Other Building</option>');
+		$('#gtag').append('<option value="Impervious Area">Impervious Area</option>');
+//		setProperties(event);
+		// open dialog to prompt for properties
+		document.getElementById('modtitle').innerHTML = "SiteID: " + pSiteID;
+		$("#myModal").modal({show: true, backdrop: "static"});
+	}
+	
+	
+	
+	var gaGeom = event.feature.getGeometry();
+	var gaGeomType = gaGeom.getType();
+	var verticesOutside = 0;
+	if (gaGeomType == 'Point')  {
+//		console.log(gaGeom.get().lat());
+		var queryp;
+		var query;
+		var res;
+			queryp = "SELECT Parcel12  FROM " + FT_TableID + " WHERE Parcel12 = '"+ pP12 +"' AND ST_INTERSECTS(Location, CIRCLE(LATLNG(" + gaGeom.get().lat() + "," + gaGeom.get().lng() + "),1))";
+			query = 'https://www.googleapis.com/fusiontables/v2/query?key=AIzaSyDy0O2hjT2-qZe2klgq_wa3Pm6PLFhZMbM&alt=csv&v=3&sql=' + queryp;
+			res = httpGet((query));
+			if (res.search(pP12) > -1) {
+	//			console.log(i + ': intersect ' + pP12)
+			}
+			else {
+				verticesOutside ++;
+			}	
+	}
+	else if (gaGeomType == 'LineString') {
+		var queryp;
+		var query;
+		var res;
+//		console.log(gaGeom.getAt(0).lat() + ' ' + gaGeom.getLength());
+		for (var i = 0; i < gaGeom.getLength(); i++) {
+	//		polyString += 'LATLNG(' + tpaths[i].lat() + ', ' + tpaths[i].lng() + '),'
+			queryp = "SELECT Parcel12  FROM " + FT_TableID + " WHERE Parcel12 = '"+ pP12 +"' AND ST_INTERSECTS(Location, CIRCLE(LATLNG(" + gaGeom.getAt(i).lat() + "," + gaGeom.getAt(i).lng() + "),1))";
+			query = 'https://www.googleapis.com/fusiontables/v2/query?key=AIzaSyDy0O2hjT2-qZe2klgq_wa3Pm6PLFhZMbM&alt=csv&v=3&sql=' + queryp;
+	//		console.log(queryp);
+					res = httpGet((query));
+	//		console.log(res.search(pP12))
+			if (res.search(pP12) > -1) {
+	//			console.log(i + ': intersect ' + pP12)
+			}
+			else {
+				verticesOutside ++;
+			}	
+	}
+
+	
+		
+	}
+	else if (gaGeomType == 'Polygon')  {
+		var tpaths = gaGeom.getAt(0).getArray();
+		var queryp;
+		var query;
+		var res;
+		for (var i = 0; i < tpaths.length; i++) {
+	//		polyString += 'LATLNG(' + tpaths[i].lat() + ', ' + tpaths[i].lng() + '),'
+			queryp = "SELECT Parcel12  FROM " + FT_TableID + " WHERE Parcel12 = '"+ pP12 +"' AND ST_INTERSECTS(Location, CIRCLE(LATLNG(" + tpaths[i].lat() + "," + tpaths[i].lng() + "),1))";
+			query = 'https://www.googleapis.com/fusiontables/v2/query?key=AIzaSyDy0O2hjT2-qZe2klgq_wa3Pm6PLFhZMbM&alt=csv&v=3&sql=' + queryp;
+	//		console.log(queryp);
+					res = httpGet((query));
+	//		console.log(res.search(pP12))
+			if (res.search(pP12) > -1) {
+	//			console.log(i + ': intersect ' + pP12)
+			}
+			else {
+				verticesOutside ++;
+			}	
+	}
+	}
+	if (verticesOutside > 0) {
+		alert(verticesOutside + ' Alert: Part of sketch is outside target parcel ' + pP12);
+		}
+	
+
+});  //end of add listener add feature
+
+map.data.addListener('click', function(event) {
+//	console.log(event.feature.getGeometry().getType() + ': ' + event.feature.getProperty('caption'));
+	pevent = event;
+
+//	setProperties(event);
+	var gType = event.feature.getGeometry().getType();
+	if (gType == "Point") {
+		$("#mod-input").removeClass('hidden');
+		$('#gtag').empty().append('<option value="">---Select Tag---</option>');
+		$('#gtag').append('<option value="Septic Tank">Septic Tank</option>');
+		$('#gtag').append('<option value="Distribution Box">Distribution Box</option>');
+
+//		setProperties(event);
+		// open dialog to prompt for properties
+		document.getElementById('gtag').value = event.feature.getProperty('tag');
+		document.getElementById('gdetails').value = event.feature.getProperty('caption');	
+		document.getElementById('modtitle').innerHTML = "SiteID: " + event.feature.getProperty('siteid');
+		$("#myModal").modal({show: true, backdrop: "static"});
+	}
+	else if (gType == "Polygon") {
+		$("#mod-input").removeClass('hidden');
+		$('#gtag').empty().append('<option value="">---Select Tag---</option>');
+		$('#gtag').append('<option value="Drainfield">Drainfield</option>');
+		$('#gtag').append('<option value="Building served by OSS">Building served by OSS</option>');
+		$('#gtag').append('<option value="Other Building">Other Building</option>');
+		$('#gtag').append('<option value="Impervious Area">Impervious Area</option>');
+//		setProperties(event);
+		// open dialog to prompt for properties
+		document.getElementById('gtag').value = event.feature.getProperty('tag');
+		document.getElementById('gdetails').value = event.feature.getProperty('caption');	
+		document.getElementById('modtitle').innerHTML = "SiteID: " + event.feature.getProperty('siteid');
+		$("#myModal").modal({show: true, backdrop: "static"});
+	}
+	else if (gType == "LineString") {
+//		alert(document.getElementById('gtag').display);
+		$("#mod-input").addClass('hidden');
+		$("#myModal").modal({show: true, backdrop: "static"});
+	}
+		
+		
+})
+	
+//	 infoWindow2.close();
+//     infoWindow2.setContent('Site: ' + event.feature.getProperty('siteid') + '<br>' + event.feature.getProperty('caption'));
+//    infoWindow2.setPosition(event.latLng);
+//     infoWindow2.setOptions({pixelOffset: new google.maps.Size(0,-34)});
+//     infoWindow2.open(map);	}); 
+
+  google.maps.LatLng.prototype.kmTo = function(a){ 
+    var e = Math, ra = e.PI/180; 
+    var b = this.lat() * ra, c = a.lat() * ra, d = b - c; 
+    var g = this.lng() * ra - a.lng() * ra; 
+    var f = 2 * e.asin(e.sqrt(e.pow(e.sin(d/2), 2) + e.cos(b) * e.cos(c) * e.pow(e.sin(g/2), 2))); 
+    return f * 6378.137; 
+  } 
+
+
+
+  google.maps.Polyline.prototype.inKm = function(n){ 
+    var a = this.getPath(n), len = a.getLength(), dist = 0; 
+    for(var i=0; i<len-1; i++){ 
+      dist += a.getAt(i).kmTo(a.getAt(i+1)); 
+    } 
+    return dist; 
+  } 	 
+
+
+
+if (pP12 == null  || pP12 == 'undefined' ) { ///Called without P12 parameter
+	// Try HTML5 geolocation.
+	 ////Zoom to current location (Still initiale-ing)
+	var infoWindow = new google.maps.InfoWindow;
+	map.data.setControls(null);
+
+	if (navigator.geolocation) {
+	  navigator.geolocation.getCurrentPosition(function(position) {
+		var pos = {
+		  lat: position.coords.latitude,
+		  lng: position.coords.longitude
+		};
+		var latlon = pos.lat + ', ' + pos.lng;
+		infoWindow.setPosition(pos);
+		infoWindow.setContent(latlon);
+		map.setCenter(pos);
+		map.setZoom(17);
+	  });
+	} else {
+	  // Browser doesn't support Geolocation
+	  alert("false")
+	  handleLocationError(false, infoWindow, map.getCenter());
+	}
+}
+else {   ///Zoom to parcel indicated by pP12
+//	alert(pP12);
+	changeQuery(pP12);
+
+}
+
+
+	
+// Set default parcel layer from Fusion Tables  
+  layer = new google.maps.FusionTablesLayer({
+	map: map,
+//	suppressInfoWindows: true,
+    query: {
+      //Previous select: 'latitude', /* was 'Latitude,Longitude', used to work... */
+      select: 'col2',
+      from: FT_TableID,
+       where: ""
+    },
+	options: {
+        styleId: 2,
+        templateId: 2
+      }
+
+});
+
+
+// Set geoFeatures layer from Fusion Tables  
+  geoFlayer = new google.maps.FusionTablesLayer({
+	  map: map,
+    query: {
+      //Previous select: 'latitude', was 'Latitude,Longitude', used to work...
+      select: 'col2',
+      from: FTGeof_TableID,
+      where: ""
+
+    },
+	options: {
+        styleId: 2,
+        templateId: 2
+		}
+});
+
+
+
+  //SET MAP    
+//layer.setMap(null);
+//layer.setMap(map);
+
+
+  //SET MAP    
+//geoFlayer.setMap(map);
+
+
+
+// Create the DIV to hold the control and call the CenterControl()
+// constructor passing in this DIV.
+var centerControlDiv = document.createElement('div');
+var centerControl = new CenterControl(centerControlDiv, map);
+centerControlDiv.index = 1;
+map.controls[google.maps.ControlPosition.TOP_LEFT].push(centerControlDiv);
+
+if (pSiteID != null  & pSiteID != 'undefined' ) {  //Display Show! only for siteid parameter
+var rightControlDiv = document.createElement('div');
+var rightControl = new RightControl(rightControlDiv, map);
+rightControlDiv.index = 1;
+map.controls[google.maps.ControlPosition.TOP_RIGHT].push(rightControlDiv);
+}
+
+}  ///this is end of initialize
+//***************************************************************************************************
+
+function changeQuery(term) {
+	globeterm = term
+	
+
+//alert("query="+term);
+
+
+  // zoom and center map on query results
+  //set the query using the parameter
+ // var queryText = encodeURIComponent("SELECT 'latitude', 'longitude' FROM " + FT_TableID + " WHERE 'Continent' contains " + "'" + term + "'");
+
+ var queryText = encodeURIComponent("SELECT 'Lat', 'Lon'  FROM " + FT_TableID + " WHERE 'Parcel12' STARTS WITH " + "'" + term + "'");
+ 
+ 
+//alert(queryText)
+var query = new google.visualization.Query('https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
+
+query.send(zoomTo);
+
+}
+
+function zoomTo(response) {
+  if (!response) {
+    alert('no response');
+    return;
+  }
+  if (response.isError()) {
+    alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+    return;
+  }
+  FTresponse = response;
+  //for more information on the response object, see the documentation
+  //http://code.google.com/apis/visualization/documentation/reference.html#QueryResponse
+  numRows = response.getDataTable().getNumberOfRows();
+  numCols = response.getDataTable().getNumberOfColumns();
+
+  var bounds = new google.maps.LatLngBounds();
+  var numResults = 0;
+  for (i = 0; i < numRows; i++) {
+    if (!isNaN(parseFloat(response.getDataTable().getValue(i, 0))) && !isNaN(parseFloat(response.getDataTable().getValue(i, 1)))) {
+      var point = new google.maps.LatLng(
+        parseFloat(response.getDataTable().getValue(i, 0)),
+        parseFloat(response.getDataTable().getValue(i, 1)));
+      numResults++;
+      bounds.extend(point);
+    }
+  }
+// alert("bounds =" +bounds)
+  // zoom to the bounds
+//  alert("numResults="+numResults)
+  if (numResults > 1) {
+  map.fitBounds(bounds);
+  	layer.setOptions({
+    query: {
+         select: 'Prop_ID',
+      from: FT_TableID
+    },
+	options: {
+        styleId: 2,
+        templateId: 2
+      },
+	styles: [{
+	//'Parcel12' contains " + "'" + term + "'"
+      where: "'Parcel12' STARTS WITH " + "'" + globeterm + "'",
+      polygonOptions: {
+        strokeWeight: 6,
+//		strokeColor: '#0000FF',
+		strokeOpacity: 0.8		
+      }
+    }]
+	})
+	}
+  else if (numResults == 1) {
+	map.setCenter(point);
+	map.fitBounds(bounds);
+//	alert("zoom="+map.zoom)
+	map.setZoom(map.zoom-2);
+	addruler();
+
+
+// Only highlight polygon if siteid not specified
+if (pSiteID == null  || pSiteID == 'undefined' ) {
+	layer.setOptions({
+    query: {
+         select: 'Prop_ID',
+      from: FT_TableID
+    },
+	options: {
+        styleId: 2,
+        templateId: 2,
+		Id: google.maps.MapTypeId.HYBRID,
+
+      },
+	styles: [{
+
+      where: "'Parcel12' STARTS WITH " + "'" + globeterm + "'",
+      polygonOptions: {
+        strokeWeight: 6,
+//		strokeColor: '#0000FF',
+		strokeOpacity: 0.8		
+      }
+    }]
+	})
+}
+	
+	}
+	
+  else alert("no results");
+
+}
+
+      
+
+   
+function getAllUrlParams(url) {
+
+  // get query string from url (optional) or window
+  var queryString = url ? url.split('?')[1] : window.location.search.slice(1);
+
+  // we'll store the parameters here
+  var obj = {};
+
+  // if query string exists
+  if (queryString) {
+
+    // stuff after # is not part of query string, so get rid of it
+    queryString = queryString.split('#')[0];
+
+    // split our query string into its component parts
+    var arr = queryString.split('&');
+
+    for (var i=0; i<arr.length; i++) {
+      // separate the keys and the values
+      var a = arr[i].split('=');
+
+      // in case params look like: list[]=thing1&list[]=thing2
+      var paramNum = undefined;
+      var paramName = a[0].replace(/\[\d*\]/, function(v) {
+        paramNum = v.slice(1,-1);
+        return '';
+      });
+
+      // set parameter value (use 'true' if empty)
+      var paramValue = typeof(a[1])==='undefined' ? true : a[1];
+
+      // (optional) keep case consistent
+      paramName = paramName.toLowerCase();
+      paramValue = paramValue.toLowerCase();
+
+      // if parameter name already exists
+      if (obj[paramName]) {
+        // convert value to array (if still string)
+        if (typeof obj[paramName] === 'string') {
+          obj[paramName] = [obj[paramName]];
+        }
+        // if no array index number specified...
+        if (typeof paramNum === 'undefined') {
+          // put the value on the end of the array
+          obj[paramName].push(paramValue);
+        }
+        // if array index number specified...
+        else {
+          // put the value at that index number
+          obj[paramName][paramNum] = paramValue;
+        }
+      }
+      // if param name doesn't exist yet, set it
+      else {
+        obj[paramName] = paramValue;
+      }
+    }
+  }
+
+  return obj;
+}
+//end of getAllUrlParams
+  
+
+ 
+
+
+
+	        function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+        infoWindow.setPosition(pos);
+        infoWindow.setContent(browserHasGeolocation ?
+                              'Error: The Geolocation service failed.' :
+                              'Error: Your browser doesn\'t support geolocation.');
+		}
+
+function CenterControl(controlDiv, map) {
+
+        // Set CSS for the control border.
+        var controlUI = document.createElement('div');
+        controlUI.style.backgroundColor = '#fff';
+        controlUI.style.border = '2px solid #fff';
+        controlUI.style.borderRadius = '3px';
+        controlUI.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+        controlUI.style.cursor = 'pointer';
+        controlUI.style.marginBottom = '22px';
+        controlUI.style.textAlign = 'center';
+        controlUI.title = 'Place blue dot at current location';
+        controlDiv.appendChild(controlUI);
+
+        // Set CSS for the control interior.
+        var controlText = document.createElement('div');
+        controlText.style.color = 'rgb(25,25,25)';
+        controlText.style.fontFamily = 'Roboto,Arial,sans-serif';
+        controlText.style.fontSize = '16px';
+        controlText.style.lineHeight = '38px';
+        controlText.style.paddingLeft = '5px';
+        controlText.style.paddingRight = '5px';
+        controlText.innerHTML = 'Loc';
+        controlUI.appendChild(controlText);
+
+controlUI.addEventListener('click', function() {
+///Get current position and place blue dot
+geoLocateMarker.setMap(null);
+geoLocateCircle.setMap(null);
+//navigator.geolocation.getCurrentPosition(initialize,fail, showError,{ enableHighAccuracy: true});
+
+
+if (watchID != null)    {
+	navigator.geolocation.clearWatch(watchID);
+	watchID = null;
+	}
+else {
+	watchID = navigator.geolocation.watchPosition(initialize,fail, showError,{ maximumAge: 0, timeout: 10000, enableHighAccuracy: true});
+}
+
+
+function initialize(position) {
+//	alert('Accuracy: ' + position.coords.accuracy);
+	geoLocateMarker.setMap(null);
+	geoLocateCircle.setMap(null);
+	var myLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+	var im = 'https://www.robotwoods.com/dev/misc/bluecircle.png';
+	var userMarker = new google.maps.Marker({
+		position: myLatLng,
+		map: map,
+		icon: im
+	});
+	var circle = new google.maps.Circle({
+	  center: myLatLng,
+	  radius: position.coords.accuracy,
+	  map: map,
+	  fillColor: '#00ccff',
+	  fillOpacity: 0.2,
+	  strokeColor: '#00ccff',
+	  strokeOpacity: 0.3
+});
+
+//	alert('geolocate success');
+	geoLocateCircle = circle;
+	geoLocateMarker = userMarker;
+}
+function fail(){
+	 alert('navigator.geolocation failed. Permission denied or may not be supported (?)');
+}
+
+
+	
+//map.data.forEach(function (feature) {
+//    map.data.remove(feature);
+//});
+
+});
+}
+
+function RightControl(controlDiv, map) {
+
+// Set CSS for the control border.
+var controlUIr = document.createElement('div');
+controlUIr.style.backgroundColor = '#fff';
+controlUIr.style.border = '2px solid #fff';
+controlUIr.style.borderRadius = '3px';
+controlUIr.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
+controlUIr.style.cursor = 'pointer';
+controlUIr.style.marginBottom = '22px';
+controlUIr.style.textAlign = 'center';
+controlUIr.title = 'Click to search on GeoID';
+controlDiv.appendChild(controlUIr);
+
+// Set CSS for the control interior.
+var controlTextr = document.createElement('div');
+controlTextr.style.color = 'rgb(25,25,25)';
+controlTextr.style.fontFamily = 'Roboto,Arial,sans-serif';
+controlTextr.style.fontSize = '16px';
+controlTextr.style.lineHeight = '38px';
+controlTextr.style.paddingLeft = '5px';
+controlTextr.style.paddingRight = '5px';
+controlTextr.innerHTML = 'Show!';
+controlUIr.appendChild(controlTextr);
+
+controlUIr.addEventListener('click', function() {
+map.data.toGeoJson(function(data){
+//alert(JSON.stringify(data));
+geoString = JSON.stringify(data);
+polyObj = data
+})
+var pastedGJ = prompt('GeoShapes (copy this):', geoString);
+var total = 0;
+map.data.forEach(function(){ total++; });
+//console.log("total of " + total + " features.");
+
+//gGeo = JSON.stringify(Geo);
+//alert(pGeoDecoded);
+if (pastedGJ != geoString) {
+	    if (confirm("Clear "+ total + " shapes and paste shapes for SiteID "  + pSiteID + " ?") == true) {
+			map.data.forEach(function(feature){map.data.remove(feature)});
+			google.maps.event.removeListener(listenerAddFeature);
+			map.data.addGeoJson(JSON.parse(pastedGJ));
+			map.data.forEach(function(feature){ 
+				total++;
+				feature.setProperty('siteid', pSiteID);
+			});
+			alert( total + " shapes added.");
+		} 
+}
+
+})
+}
+
+
+function getURLParameter(name) {
+  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [null, ''])[1].replace(/\+/g, '%20')) || null;
+}	 
+
+function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            alert( "User denied the request for Geolocation.")
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert( "Location information is unavailable.")
+            break;
+        case error.TIMEOUT:
+            alert( "The request to get user location timed out.")
+            break;
+        case error.UNKNOWN_ERROR:
+            alert( "An unknown error occurred.");
+            break;
+    }
+}
+ 
+function httpGet(theUrl)
+{
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+}
+  
+  
+ function addruler() {
+ 
+    ruler1 = new google.maps.Marker({
+        position: map.getCenter() ,
+        map: map,
+        draggable: true
+    });
+ 
+    ruler2 = new google.maps.Marker({
+        position: map.getCenter() ,
+        map: map,
+        draggable: true
+    });
+     
+    var ruler1label = new Label({ map: map });
+    var ruler2label = new Label({ map: map });
+    ruler1label.bindTo('position', ruler1, 'position');
+    ruler2label.bindTo('position', ruler2, 'position');
+ 
+    rulerpoly = new google.maps.Polyline({
+        path: [ruler1.position, ruler2.position] ,
+//        strokeColor: "#FFFF00",
+        strokeColor: "#ff6600",
+        strokeOpacity: .4,
+        strokeWeight: 4
+    });
+    rulerpoly.setMap(map);
+ 
+    ruler1label.set('text',"0ft");
+    ruler2label.set('text',"0ft");
+ 
+    google.maps.event.addListener(ruler1, 'drag', function() {
+        rulerpoly.setPath([ruler1.getPosition(), ruler2.getPosition()]);
+        ruler1label.set('text',distance( ruler1.getPosition().lat(), ruler1.getPosition().lng(), ruler2.getPosition().lat(), ruler2.getPosition().lng()));
+        ruler2label.set('text',distance( ruler1.getPosition().lat(), ruler1.getPosition().lng(), ruler2.getPosition().lat(), ruler2.getPosition().lng()));
+    });
+ 
+    google.maps.event.addListener(ruler2, 'drag', function() {
+        rulerpoly.setPath([ruler1.getPosition(), ruler2.getPosition()]);
+        ruler1label.set('text',distance( ruler1.getPosition().lat(), ruler1.getPosition().lng(), ruler2.getPosition().lat(), ruler2.getPosition().lng()));
+        ruler2label.set('text',distance( ruler1.getPosition().lat(), ruler1.getPosition().lng(), ruler2.getPosition().lat(), ruler2.getPosition().lng()));
+    });
+ 
+}
+function distance(lat1,lon1,lat2,lon2) {
+    var R = 6371; // km (change this constant to get miles)
+    var dLat = (lat2-lat1) * Math.PI / 180;
+    var dLon = (lon2-lon1) * Math.PI / 180; 
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(lat1 * Math.PI / 180 ) * Math.cos(lat2 * Math.PI / 180 ) * 
+        Math.sin(dLon/2) * Math.sin(dLon/2); 
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+//    var d = R * c;
+	var d = (R * c)* 3280.8399; //in ft
+	return Math.round(d)+"ft";
+//    if (d>1) return Math.round(d)+"km";
+//    else if (d<=1) return Math.round(d*1000)+"m";
+    return d;
+}
+
+function Label(opt_options) {
+	// Initialization
+	this.setValues(opt_options);
+
+	// Label specific
+	var span = this.span_ = document.createElement('span');
+	span.style.cssText = 'position: relative; left: 0%; top: -8px; ' +
+			  'white-space: nowrap; border: 0px; font-family:arial; font-weight:bold;' +
+			  'padding: 2px; background-color: #ddd; '+
+				'opacity: .75; '+
+				'filter: alpha(opacity=75); '+
+				'-ms-filter: "alpha(opacity=75)"; '+
+				'-khtml-opacity: .75; '+
+				'-moz-opacity: .75;';
+
+	var div = this.div_ = document.createElement('div');
+	div.appendChild(span);
+	div.style.cssText = 'position: absolute; display: none';
+};
+Label.prototype = new google.maps.OverlayView;
+
+// Implement onAdd
+Label.prototype.onAdd = function() {
+	var pane = this.getPanes().overlayLayer;
+	pane.appendChild(this.div_);
+
+	
+	// Ensures the label is redrawn if the text or position is changed.
+	var me = this;
+	this.listeners_ = [
+		google.maps.event.addListener(this, 'position_changed',
+		function() { me.draw(); }),
+		google.maps.event.addListener(this, 'text_changed',
+		function() { me.draw(); })
+	];
+	
+};
+
+// Implement onRemove
+Label.prototype.onRemove = function() { this.div_.parentNode.removeChild(this.div_ );
+	// Label is removed from the map, stop updating its position/text.
+	for (var i = 0, I = this.listeners_.length; i < I; ++i) {
+		google.maps.event.removeListener(this.listeners_[i]);
+	}
+};
+
+// Implement draw
+Label.prototype.draw = function() {
+	var projection = this.getProjection();
+	var position = projection.fromLatLngToDivPixel(this.get('position'));
+
+	var div = this.div_;
+	div.style.left = position.x + 'px';
+	div.style.top = position.y + 'px';
+	div.style.display = 'block';
+
+	this.span_.innerHTML = this.get('text').toString();
+};
+
+
+</script>
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog modal-sm">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h5 class="modal-title" id="modtitle">GeoShapes</h5>
+        </div>
+        <div id="mod-input" class="modal-body">
+		<form>
+          <select name="geoShapeTag" id="gtag">
+		  <option value="Drainfield">Drainfield</option>
+		  <option value="Building served by OSS">Building served by OSS</option>
+		  <option value="Other Building">Other Building</option>
+		  <option value="Impervious Area">Impervious Area</option>
+		  <option value="Septic Tank">Septic Tank</option>
+		  <option value="Distribution Box">Distribution Box</option>
+		</select><br>
+		Location Notes: <br>
+				<input type="text" id="gdetails" name="details"><br>
+		
+		  </form>
+        </div>
+        <div class="modal-footer">
+		<div style="float:Left">
+		<button id="remove_btn" type="button" class="btn btn-default" data-dismiss="modal">Remove</button>
+		</div>
+		<div style="float:Right">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+		</div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+
+ 
+</body></html>
