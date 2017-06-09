@@ -643,6 +643,22 @@ initLocationProcedure();
                 // the current position could not be located
                 alert("The current position could not be found!");
             }
+			function showError(error) {
+    switch(error.code) {
+        case error.PERMISSION_DENIED:
+            alert( "User denied the request for Geolocation.")
+            break;
+        case error.POSITION_UNAVAILABLE:
+            alert( "Location information is unavailable.")
+            break;
+        case error.TIMEOUT:
+            alert( "The request to get user location timed out.")
+            break;
+        case error.UNKNOWN_ERROR:
+            alert( "An unknown error occurred.");
+            break;
+    }
+}
 
             function setCurrentPosition(pos) {
                 currentPositionMarker = new google.maps.Marker({
@@ -673,7 +689,9 @@ initLocationProcedure();
                             currentPositionMarker,
                             position
                         );
-                    });
+                    },
+					locError,showError,{ maximumAge: 0, timeout: 10000, enableHighAccuracy: true}
+					);
             }
 
             function setMarkerPosition(marker, position) {
@@ -687,7 +705,7 @@ initLocationProcedure();
             function initLocationProcedure() {
 //               initializeMap();
                 if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(displayAndWatch, locError);
+                    navigator.geolocation.getCurrentPosition(displayAndWatch, locError,showError,{ maximumAge: 0, timeout: 10000, enableHighAccuracy: true});
                 } else {
                     alert("Your browser does not support the Geolocation API");
                 }
