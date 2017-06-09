@@ -665,57 +665,68 @@ function CenterControl(controlDiv, map) {
         controlUI.appendChild(controlText);
 
 controlUI.addEventListener('click', function() {
-///Get current position and place blue dot
-geoLocateMarker.setMap(null);
-geoLocateCircle.setMap(null);
-//navigator.geolocation.getCurrentPosition(initialize,fail, showError,{ enableHighAccuracy: true});
-
-var im = 'https://www.robotwoods.com/dev/misc/bluecircle.png';
-var userMarker = new google.maps.Marker({
-	map: map,
-	icon: im
-});
-
-var circle = new google.maps.Circle({
-//  center: myLatLng,
-//  radius: position.coords.accuracy,
-  map: map,
-  fillColor: '#00ccff',
-  fillOpacity: 0.2,
-  strokeColor: '#00ccff',
-  strokeOpacity: 0.3
-});
+            var 
+                currentPositionMarker,
+                mapCenter = new google.maps.LatLng(40.700683, -73.925972);
+			initLocationProcedure();
 
 
-watchID = navigator.geolocation.watchPosition(initialize,fail, showError,{ maximumAge: 0, timeout: 10000, enableHighAccuracy: true});
-		
+            function locError(error) {
+                // the current position could not be located
+                alert("The current position could not be found!");
+            }
 
-function initialize(position) {
-//	alert('Accuracy: ' + position.coords.accuracy);
-	geoLocateMarker.setMap(null);
-	geoLocateCircle.setMap(null);
-	var myLatLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-	userMarker.setPosition(myLatLng);
-	circle.setCenter(myLatLng);
-	circle.setRadius(position.coords.accuracy);
+            function setCurrentPosition(pos) {
+                currentPositionMarker = new google.maps.Marker({
+                    map: map,
+                    position: new google.maps.LatLng(
+                        pos.coords.latitude,
+                        pos.coords.longitude
+                    ),
+                    title: "Current Position"
+                });
+                map.panTo(new google.maps.LatLng(
+                        pos.coords.latitude,
+                        pos.coords.longitude
+                    ));
+            }
+
+            function displayAndWatch(position) {
+                // set current position
+                setCurrentPosition(position);
+                // watch position
+                watchCurrentPosition();
+            }
+
+            function watchCurrentPosition() {
+                var positionTimer = navigator.geolocation.watchPosition(
+                    function (position) {
+                        setMarkerPosition(
+                            currentPositionMarker,
+                            position
+                        );
+                    });
+            }
+
+            function setMarkerPosition(marker, position) {
+                marker.setPosition(
+                    new google.maps.LatLng(
+                        position.coords.latitude,
+                        position.coords.longitude)
+                );
+            }
+
+            function initLocationProcedure() {
+//                initializeMap();
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(displayAndWatch, locError);
+                } else {
+                    alert("Your browser does not support the Geolocation API");
+                }
+            }
 
 
-//	alert('geolocate success');
-	geoLocateCircle = circle;
-	geoLocateMarker = userMarker;
-//	map.setCenter(userMarker.position);
-}
-function fail(){
-	 alert('navigator.geolocation failed. Permission denied or may not be supported (?)');
-}
-
-
-	
-//map.data.forEach(function (feature) {
-//    map.data.remove(feature);
-//});
-
-});
+})
 }
 
 function RightControl(controlDiv, map) {
