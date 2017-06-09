@@ -698,7 +698,7 @@ initLocationProcedure();
  //			alert("new watch");
                var positionTimer = navigator.geolocation.watchPosition(
                     function (position) {
- 			alert("new watchpos");
+// 			alert("new watchpos");
                         setMarkerPosition(position);
                     },
 					locError,showError,{ maximumAge: 0, timeout: 10000, enableHighAccuracy: true}
@@ -711,7 +711,7 @@ initLocationProcedure();
                         position.coords.latitude,
                         position.coords.longitude);
 						circle.setCenter(nlatlng);
-						circle.setRadius(position.accuracy);
+						circle.setRadius(position.coords.accuracy);
 						currentPositionMarker.setPosition(nlatlng);
             }
 
