@@ -636,6 +636,7 @@ controlUI.addEventListener('click', function() {
 //geoLocateMarker = userMarker;
 initLocationProcedure();
             var currentPositionMarker,
+			circle,
                 mapCenter = new google.maps.LatLng(40.700683, -73.925972);
 
 
@@ -661,14 +662,25 @@ initLocationProcedure();
 }
 
             function setCurrentPosition(pos) {
+				var im = 'https://www.robotwoods.com/dev/misc/bluecircle.png';
                 currentPositionMarker = new google.maps.Marker({
                     map: map,
                     position: new google.maps.LatLng(
                         pos.coords.latitude,
                         pos.coords.longitude
                     ),
+					icon: im,
                     title: "Current Position"
                 });
+				circle = new google.maps.Circle({
+					  center: currentPositionMarker.position,
+					  radius: pos.coords.accuracy,
+					  map: map,
+					  fillColor: '#00ccff',
+					  fillOpacity: 0.2,
+					  strokeColor: '#00ccff',
+					  strokeOpacity: 0.3
+				});
                 map.panTo(new google.maps.LatLng(
                         pos.coords.latitude,
                         pos.coords.longitude
@@ -683,23 +695,24 @@ initLocationProcedure();
             }
 
             function watchCurrentPosition() {
-                var positionTimer = navigator.geolocation.watchPosition(
+ //			alert("new watch");
+               var positionTimer = navigator.geolocation.watchPosition(
                     function (position) {
-                        setMarkerPosition(
-                            currentPositionMarker,
-                            position
-                        );
+ 			alert("new watchpos");
+                        setMarkerPosition(position);
                     },
 					locError,showError,{ maximumAge: 0, timeout: 10000, enableHighAccuracy: true}
 					);
             }
 
-            function setMarkerPosition(marker, position) {
-                marker.setPosition(
-                    new google.maps.LatLng(
+            function setMarkerPosition(position) {
+			alert("new set");
+				var nlatlng = new google.maps.LatLng(
                         position.coords.latitude,
-                        position.coords.longitude)
-                );
+                        position.coords.longitude);
+						circle.setCenter(nlatlng);
+						circle.setRadius(position.accuracy);
+						currentPositionMarker.setPosition(nlatlng);
             }
 
             function initLocationProcedure() {
