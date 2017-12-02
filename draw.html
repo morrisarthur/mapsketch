@@ -169,6 +169,7 @@ listenerAddFeature = map.data.addListener('addfeature', function(event) {
 	else if (gType == "Polygon") {
 		$('#gtag').empty().append('<option value="">---Select Tag---</option>');
 		$('#gtag').append('<option value="Drainfield">Drainfield</option>');
+		$('#gtag').append('<option value="Sand Filter">Sand Filter</option>');
 		$('#gtag').append('<option value="Building/Connection">Building/Connection</option>');
 		$('#gtag').append('<option value="Other Building">Other Building</option>');
 		$('#gtag').append('<option value="Impervious Area">Impervious Area</option>');
@@ -258,7 +259,9 @@ map.data.addListener('click', function(event) {
 		$("#mod-input").removeClass('hidden');
 		$('#gtag').empty().append('<option value="">---Select Tag---</option>');
 		$('#gtag').append('<option value="Septic Tank">Septic Tank</option>');
+		$('#gtag').append('<option value="Pump Tank">Pump Tank</option>');
 		$('#gtag').append('<option value="Distribution Box">Distribution Box</option>');
+		$('#gtag').append('<option value="Water Intake">Water Intake</option>');
 
 //		setProperties(event);
 		// open dialog to prompt for properties
