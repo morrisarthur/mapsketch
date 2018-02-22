@@ -152,7 +152,7 @@ pevent.feature.setProperty('caption', document.getElementById('gdetails').value)
 //}
 
 listenerAddFeature = map.data.addListener('addfeature', function(event) {
-	console.log('1'+ event.feature.getGeometry().getType() + ': ';
+	console.log('1'+ event.feature.getGeometry().getType() + ': ');
 function authenticate() {
     return gapi.auth2.getAuthInstance()
         .signIn({scope: "https://www.googleapis.com/auth/fusiontables https://www.googleapis.com/auth/fusiontables.readonly"})
