@@ -152,6 +152,8 @@ pevent.feature.setProperty('caption', document.getElementById('gdetails').value)
 //}
 
 listenerAddFeature = map.data.addListener('addfeature', function(event) {
+	console.log('1'+ event.feature.getGeometry().getType() + ': ' + event.feature.getProperty('caption'));
+
 	pevent = event;
 	document.getElementById('gtag').value = "";
 	document.getElementById('gdetails').value = ""
@@ -253,7 +255,7 @@ listenerAddFeature = map.data.addListener('addfeature', function(event) {
 });  //end of add listener add feature
 
 map.data.addListener('click', function(event) {
-//	console.log(event.feature.getGeometry().getType() + ': ' + event.feature.getProperty('caption'));
+	console.log(event.feature.getGeometry().getType() + ': ' + event.feature.getProperty('caption'));
 	pevent = event;
 
 //	setProperties(event);
