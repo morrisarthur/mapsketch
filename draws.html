@@ -165,7 +165,7 @@ pevent.feature.setProperty('siteid', pSiteID)
 pevent.feature.setProperty('tag', document.getElementById('gtag').value);
 pevent.feature.setProperty('caption', document.getElementById('gdetails').value);
 execute(pSiteID,document.getElementById('gtag').value,document.getElementById('gdetails').value,pevent.feature.getGeometry().getType());
-//console.log(pevent.feature.getGeometry().getType() + ': ' + pevent.feature.getProperty('tag'));
+console.log(pevent.feature)
 })
 //}
 
