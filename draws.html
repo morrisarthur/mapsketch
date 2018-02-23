@@ -899,7 +899,7 @@ function httpGet(theUrl)
   // Make sure the client is loaded and sign-in is complete before calling this method.
   function execute(fpsiteid,ffName) {
     return gapi.client.fusiontables.query.sql({
-      "sql": "Insert Into 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q (siteid,fName) VALUES (" + fpsiteid + ", '" + ffName + "')";
+      "sql": "Insert Into 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q (siteid,fName) VALUES (" + fpsiteid + ", '" + ffName + "')"
     })
         .then(function(response) {
                 // Handle the results here (response.result has the parsed body).
