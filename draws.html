@@ -164,6 +164,7 @@ $('#myModal').on('hidden.bs.modal', function () {
 pevent.feature.setProperty('siteid', pSiteID)
 pevent.feature.setProperty('tag', document.getElementById('gtag').value);
 pevent.feature.setProperty('caption', document.getElementById('gdetails').value);
+execute(pSiteID);
 //console.log(pevent.feature.getGeometry().getType() + ': ' + pevent.feature.getProperty('tag'));
 })
 //}
@@ -266,7 +267,8 @@ listenerAddFeature = map.data.addListener('addfeature', function(event) {
 	if (verticesOutside > 0) {
 		alert(verticesOutside + ' Alert: Part of sketch is outside target parcel ' + pP12);
 		}
-	execute();
+	
+
 
 });  //end of add listener add feature
 
@@ -895,9 +897,9 @@ function httpGet(theUrl)
               function(err) { console.error("Error loading GAPI client for API", err); });
   }
   // Make sure the client is loaded and sign-in is complete before calling this method.
-  function execute() {
+  function execute(fpsiteid,ffName) {
     return gapi.client.fusiontables.query.sql({
-      "sql": "Insert Into 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q (siteid) VALUES (110)"
+      "sql": "Insert Into 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q (siteid,fName) VALUES (" + fpsiteid + ", '" + ffName + "')";
     })
         .then(function(response) {
                 // Handle the results here (response.result has the parsed body).
