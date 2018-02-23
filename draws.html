@@ -164,7 +164,7 @@ $('#myModal').on('hidden.bs.modal', function () {
 pevent.feature.setProperty('siteid', pSiteID)
 pevent.feature.setProperty('tag', document.getElementById('gtag').value);
 pevent.feature.setProperty('caption', document.getElementById('gdetails').value);
-execute(pSiteID);
+execute(pSiteID,document.getElementById('gtag').value,document.getElementById('gdetails').value,pevent.feature.getGeometry().getType());
 //console.log(pevent.feature.getGeometry().getType() + ': ' + pevent.feature.getProperty('tag'));
 })
 //}
@@ -897,9 +897,9 @@ function httpGet(theUrl)
               function(err) { console.error("Error loading GAPI client for API", err); });
   }
   // Make sure the client is loaded and sign-in is complete before calling this method.
-  function execute(fpsiteid,ffName) {
+  function execute(fpsiteid,ffName,ffDescription,ffType) {
     return gapi.client.fusiontables.query.sql({
-      "sql": "Insert Into 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q (siteid,fName) VALUES (" + fpsiteid + ", '" + ffName + "')"
+      "sql": "Insert Into 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q (siteid,fName,fDescription,fType) VALUES (" + fpsiteid + ", '" + ffName  + ", '" + ffDescription + ", '" + ffType + "')"
     })
         .then(function(response) {
                 // Handle the results here (response.result has the parsed body).
