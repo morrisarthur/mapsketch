@@ -62,8 +62,9 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDy0O2hjT2-qZe2klgq_wa3Pm6PLFhZMbM&libraries=geometry&v=3"></script>
 
+<script src="https://apis.google.com/js/api.js?libraries=geometry&v=3"></script>
 <script type="text/javascript">
-
+	
 google.load('visualization', '1', {
   'packages': ['corechart', 'table', 'geomap']
 });
@@ -152,36 +153,6 @@ pevent.feature.setProperty('caption', document.getElementById('gdetails').value)
 //}
 
 listenerAddFeature = map.data.addListener('addfeature', function(event) {
-	console.log('1'+ event.feature.getGeometry().getType() + ': ');
-function authenticate() {
-    return gapi.auth2.getAuthInstance()
-        .signIn({scope: "https://www.googleapis.com/auth/fusiontables https://www.googleapis.com/auth/fusiontables.readonly"})
-        .then(function() { console.log("Sign-in successful"); },
-              function(err) { console.error("Error signing in", err); });
-  }
-  function loadClient() {
-    return gapi.client.load("https://content.googleapis.com/discovery/v1/apis/fusiontables/v2/rest")
-        .then(function() { console.log("GAPI client loaded for API"); },
-              function(err) { console.error("Error loading GAPI client for API", err); });
-  }
-  // Make sure the client is loaded and sign-in is complete before calling this method.
-  function execute() {
-    return gapi.client.fusiontables.query.sql({
-      "sql": "SELECT Parcel12  FROM 1wUquUQoL6PgAbqysRWwCPYf6_tWD9NtEWYJ1KD-e WHERE Parcel12 = '370212450357'"
-    })
-        .then(function(response) {
-                // Handle the results here (response.result has the parsed body).
-                console.log("Response", response);
-              },
-              function(err) { console.error("Execute error", err); });
-  }
-  gapi.load("client:auth2", function() {
-var  clientid = '13872833309-o9hbt87a1ecdhniq8hmtblpllv34bsib.apps.googleusercontent.com'
-    gapi.auth2.init({client_id: clientid});
-  });
-	authenticate().then(loadClient)
-	
-
 	pevent = event;
 	document.getElementById('gtag').value = "";
 	document.getElementById('gdetails').value = ""
@@ -278,13 +249,12 @@ var  clientid = '13872833309-o9hbt87a1ecdhniq8hmtblpllv34bsib.apps.googleusercon
 	if (verticesOutside > 0) {
 		alert(verticesOutside + ' Alert: Part of sketch is outside target parcel ' + pP12);
 		}
-	execute()
 	
 
 });  //end of add listener add feature
 
 map.data.addListener('click', function(event) {
-	console.log(event.feature.getGeometry().getType() + ': ' + event.feature.getProperty('caption'));
+//	console.log(event.feature.getGeometry().getType() + ': ' + event.feature.getProperty('caption'));
 	pevent = event;
 
 //	setProperties(event);
