@@ -266,7 +266,7 @@ listenerAddFeature = map.data.addListener('addfeature', function(event) {
 	if (verticesOutside > 0) {
 		alert(verticesOutside + ' Alert: Part of sketch is outside target parcel ' + pP12);
 		}
-	
+	execute();
 
 });  //end of add listener add feature
 
@@ -897,7 +897,7 @@ function httpGet(theUrl)
   // Make sure the client is loaded and sign-in is complete before calling this method.
   function execute() {
     return gapi.client.fusiontables.query.sql({
-      "sql": "Insert Into 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q (siteid) VALUES (111)"
+      "sql": "Insert Into 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q (siteid) VALUES (110)"
     })
         .then(function(response) {
                 // Handle the results here (response.result has the parsed body).
