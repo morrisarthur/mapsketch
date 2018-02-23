@@ -119,7 +119,7 @@ map.setTilt(0);
 // Get URL parameter
 pP12 = getAllUrlParams().p;
 pSiteID = getAllUrlParams().s;
-If (pSiteID > 0) {
+if (pSiteID > 0) {
 	gapi.load("client:auth2", {
 	    callback: function() {
 	      var  clientid = '13872833309-o9hbt87a1ecdhniq8hmtblpllv34bsib.apps.googleusercontent.com'
