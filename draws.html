@@ -62,7 +62,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDy0O2hjT2-qZe2klgq_wa3Pm6PLFhZMbM&libraries=geometry&v=3"></script>
 
-<script src="https://apis.google.com/js/api.js?libraries=geometry&v=3"></script>
+<script src="https://apis.google.com/js/api.js"></script>
 <script type="text/javascript">
 	
 google.load('visualization', '1', {
@@ -119,6 +119,22 @@ map.setTilt(0);
 // Get URL parameter
 pP12 = getAllUrlParams().p;
 pSiteID = getAllUrlParams().s;
+If (pSiteID !== null ) {
+	gapi.load("client:auth2", {
+	    callback: function() {
+	      var  clientid = '13872833309-o9hbt87a1ecdhniq8hmtblpllv34bsib.apps.googleusercontent.com'
+	      gapi.auth2.init({client_id: clientid, ux_mode: "popup"});
+	    },
+	    onerror: function() {
+	      alert('gapi.client failed');
+	    },
+	    timeout: 3000,
+	    ontimeout: function() {
+	      alert('gapi.client timed out');
+	    }
+
+	  })
+}
 
 map.data.setStyle();
 map.data.setControls(['Point', 'LineString', 'Polygon']);
@@ -153,6 +169,7 @@ pevent.feature.setProperty('caption', document.getElementById('gdetails').value)
 //}
 
 listenerAddFeature = map.data.addListener('addfeature', function(event) {
+	authenticate().then(loadClient)
 	pevent = event;
 	document.getElementById('gtag').value = "";
 	document.getElementById('gdetails').value = ""
@@ -865,6 +882,30 @@ function httpGet(theUrl)
     });
  
 }
+
+  function authenticate() {
+    return gapi.auth2.getAuthInstance()
+        .signIn({scope: "https://www.googleapis.com/auth/fusiontables https://www.googleapis.com/auth/fusiontables.readonly"})
+        .then(function() { console.log("Sign-in successful"); },
+              function(err) { console.error("Error signing in", err); });
+  }
+  function loadClient() {
+    return gapi.client.load("https://content.googleapis.com/discovery/v1/apis/fusiontables/v2/rest")
+        .then(function() { console.log("GAPI client loaded for API"); },
+              function(err) { console.error("Error loading GAPI client for API", err); });
+  }
+  // Make sure the client is loaded and sign-in is complete before calling this method.
+  function execute() {
+    return gapi.client.fusiontables.query.sql({
+      "sql": "Insert Into 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q (siteid) VALUES (111)"
+    })
+        .then(function(response) {
+                // Handle the results here (response.result has the parsed body).
+                console.log("Response", response);
+              },
+              function(err) { console.error("Execute error", err); });
+  }	
+	
 function distance(lat1,lon1,lat2,lon2) {
     var R = 6371; // km (change this constant to get miles)
     var dLat = (lat2-lat1) * Math.PI / 180;
