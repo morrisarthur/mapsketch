@@ -172,7 +172,7 @@ map.data.toGeoJson(function(data){
 //alert(JSON.stringify(data));
 geoString = JSON.stringify(data);
 polyObj = data
-console.log geostring;
+console.log(geostring);
 var kmlstring = geostring.replace(jsonprefix, polyprefix);
 kmlstring = kmlstring.slice(0,kmlstring.search("}"));
 kmlstring =  kmlstring.replace(/\],/g, " ");
