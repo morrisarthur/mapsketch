@@ -161,16 +161,30 @@ $(document).on("click", "#remove_btn", function(event){
 
 //function setProperties(pevent) { 
 $('#myModal').on('hidden.bs.modal', function () {
+
+var polyprefix = '<Polygon><outerBoundaryIs><LinearRing><coordinates>';
+var polysuffix = '</coordinates></LinearRing></outerBoundaryIs></Polygon>';
+var jsonprefix = '{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Polygon","coordinates"
 pevent.feature.setProperty('siteid', pSiteID)
 pevent.feature.setProperty('tag', document.getElementById('gtag').value);
 pevent.feature.setProperty('caption', document.getElementById('gdetails').value);
-execute(pSiteID,document.getElementById('gtag').value,document.getElementById('gdetails').value,pevent.feature.getGeometry().getType());
 map.data.toGeoJson(function(data){
 //alert(JSON.stringify(data));
 geoString = JSON.stringify(data);
 polyObj = data
+console.log geostring;
+var kmlstring = geostring.replace(jsonprefix, polyprefix);
+kmlstring = kmlstring.slice(0,kmlstring.search("}"));
+kmlstring =  kmlstring.replace(/\],/g, " ");
+kmlstring =  kmlstring.replace(/\]/g, "");
+kmlstring =  kmlstring.replace(/\[/g, "");
+kmlstring = kmlstring + polysuffix;
+console.log(kmlstring);	
+	
 })
-console.log(geoString)
+console.log(geoString)	
+execute(kmlstring, pSiteID,document.getElementById('gtag').value,document.getElementById('gdetails').value,pevent.feature.getGeometry().getType());
+
 })
 //}
 
@@ -902,8 +916,8 @@ function httpGet(theUrl)
               function(err) { console.error("Error loading GAPI client for API", err); });
   }
   // Make sure the client is loaded and sign-in is complete before calling this method.
-  function execute(fpsiteid,ffName,ffDescription,ffType) {
-    insertsql = "Insert Into 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q (siteid,fName,fDescription,fType) VALUES (" + fpsiteid + ", '" + ffName  + "', '" + ffDescription + "', '" + ffType + "')";
+  function execute(fkml,fpsiteid,ffName,ffDescription,ffType) {
+    insertsql = "Insert Into 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q (KmlString,siteid,fName,fDescription,fType) VALUES (fkml," + fpsiteid + ", '" + ffName  + "', '" + ffDescription + "', '" + ffType + "')";
     console.log('sqlsent: ' + insertsql)   
     return gapi.client.fusiontables.query.sql({
       "sql": insertsql
