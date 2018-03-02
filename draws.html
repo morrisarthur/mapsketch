@@ -918,7 +918,7 @@ function httpGet(theUrl)
   }
   // Make sure the client is loaded and sign-in is complete before calling this method.
   function execute(fkml,fpsiteid,ffName,ffDescription,ffType) {
-    insertsql = "Insert Into 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q (KmlString,siteid,fName,fDescription,fType) VALUES (fkml," + fpsiteid + ", '" + ffName  + "', '" + ffDescription + "', '" + ffType + "')";
+    insertsql = "Insert Into 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q (KmlString,siteid,fName,fDescription,fType) VALUES ('" + fkml + "'," + fpsiteid + ", '" + ffName  + "', '" + ffDescription + "', '" + ffType + "')";
     console.log('sqlsent: ' + insertsql)   
     return gapi.client.fusiontables.query.sql({
       "sql": insertsql
