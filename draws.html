@@ -168,12 +168,13 @@ var jsonprefix = '{"type":"FeatureCollection","features":[{"type":"Feature","geo
 pevent.feature.setProperty('siteid', pSiteID)
 pevent.feature.setProperty('tag', document.getElementById('gtag').value);
 pevent.feature.setProperty('caption', document.getElementById('gdetails').value);
+var kmlstring;
 map.data.toGeoJson(function(data){
 //alert(JSON.stringify(data));
 var geoString = JSON.stringify(data);
 //polyObj = data
 console.log(geoString);
-var kmlstring = geoString.replace(jsonprefix, polyprefix);
+kmlstring = geoString.replace(jsonprefix, polyprefix);
 kmlstring = kmlstring.slice(0,kmlstring.search("}"));
 kmlstring =  kmlstring.replace(/\],/g, " ");
 kmlstring =  kmlstring.replace(/\]/g, "");
@@ -182,7 +183,7 @@ kmlstring = kmlstring + polysuffix;
 console.log(kmlstring);	
 	
 })
-console.log(geoString)	
+
 execute(kmlstring, pSiteID,document.getElementById('gtag').value,document.getElementById('gdetails').value,pevent.feature.getGeometry().getType());
 
 })
