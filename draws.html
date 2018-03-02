@@ -170,8 +170,8 @@ pevent.feature.setProperty('tag', document.getElementById('gtag').value);
 pevent.feature.setProperty('caption', document.getElementById('gdetails').value);
 map.data.toGeoJson(function(data){
 //alert(JSON.stringify(data));
-geoString = JSON.stringify(data);
-polyObj = data
+var geoString = JSON.stringify(data);
+//polyObj = data
 console.log(geostring);
 var kmlstring = geostring.replace(jsonprefix, polyprefix);
 kmlstring = kmlstring.slice(0,kmlstring.search("}"));
