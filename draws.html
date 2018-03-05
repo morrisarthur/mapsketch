@@ -970,8 +970,12 @@ function httpGet(theUrl)
         .then(function(response) {
                 // Handle the results here (response.result has the parsed body).
                 console.log("Response", response);
+	    	console.log("ResponseStatus: " + response
               },
-              function(err) { console.error("Execute error", err); });
+              function(err) { 
+			alert("Oooops: " + err);
+			console.error("Execute error", err); 
+		});
   }	
 	
 function distance(lat1,lon1,lat2,lon2) {
