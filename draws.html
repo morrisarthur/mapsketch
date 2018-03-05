@@ -92,6 +92,7 @@ var listenerAddFeature;
 var myLatLng = new google.maps.LatLng(0.0, 0.0);
 var blTrackLoc;
 var im = 'https://www.robotwoods.com/dev/misc/bluecircle.png';	
+var googleUserEmail;
 
 
 google.maps.event.addDomListener(window, 'load', initialize);
@@ -129,13 +130,8 @@ if (pSiteID > 0) {
           var isSignedIn = auth2.isSignedIn.get();
           var currentUser = auth2.currentUser.get();
 	  var profile = auth2.currentUser.get().getBasicProfile();
-	  console.log('ID: ' + profile.getId());
-	  console.log('Full Name: ' + profile.getName());
-	  console.log('Given Name: ' + profile.getGivenName());
-	  console.log('Family Name: ' + profile.getFamilyName());
-	  console.log('Image URL: ' + profile.getImageUrl());
-	  console.log('Email: ' + profile.getEmail());
-		console.log(currentUser);
+	  googleUserEmail = profile.getEmail());
+
 	})
 	    },
 	    onerror: function() {
@@ -174,15 +170,32 @@ $(document).on("click", "#remove_btn", function(event){
 
 $(document).on("click", "#close_btn", function(event){
 	var gType = pevent.feature.getGeometry().getType();
+	var kmlprefix;
+	var kmlsuffix;
+	var jsonprefix;
+	var kmlstring;
 	if (gType == "Point") {
 		console.log("point....");
 	}
 	else if (gType == "Polygon") {
 		console.log("polygon....");
 	}
-	else if (gType == "Polygon") {
-		console.log("polygon....");
+	else if (gType == "LineString") {
+		kmlprefix = '<LineString><coordinates>';
+		kmlsuffix = '</coordinates></LineString>';
+		jsonprefix = '{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"LineString","coordinates":';
 	}
+	map.data.toGeoJson(function(data){
+		var geoString = JSON.stringify(data);
+		kmlstring =  geoString.replace(jsonprefix, kmlprefix);
+		kmlstring = kmlstring.slice(0,kmlstring.search("}"));
+		kmlstring =  kmlstring.replace(/\],/g, " ");
+		kmlstring =  kmlstring.replace(/\]/g, "");
+		kmlstring =  kmlstring.replace(/\[/g, "");
+		kmlstring = kmlstring + kmlsuffix;
+	})
+	execute(kmlstring, pSiteID,document.getElementById('gtag').value,document.getElementById('gdetails').value,pevent.feature.getGeometry().getType());
+
    
 	
 });
