@@ -124,15 +124,6 @@ if (pSiteID > 0) {
 	    callback: function() {
 	      var  clientid = '13872833309-o9hbt87a1ecdhniq8hmtblpllv34bsib.apps.googleusercontent.com'
 	      gapi.auth2.init({client_id: clientid, ux_mode: "popup"});
-		if (auth2.isSignedIn.get()) {
-		  var profile = auth2.currentUser.get().getBasicProfile();
-		  console.log('ID: ' + profile.getId());
-		  console.log('Full Name: ' + profile.getName());
-		  console.log('Given Name: ' + profile.getGivenName());
-		  console.log('Family Name: ' + profile.getFamilyName());
-		  console.log('Image URL: ' + profile.getImageUrl());
-		  console.log('Email: ' + profile.getEmail());
-		}
 	    },
 	    onerror: function() {
 	      alert('gapi.client failed');
@@ -915,7 +906,15 @@ function httpGet(theUrl)
         .signIn({scope: "https://www.googleapis.com/auth/fusiontables https://www.googleapis.com/auth/fusiontables.readonly"})
         .then(function() { 
 	    console.log("Sign-in successful");
-
+		if (gapi.auth2.isSignedIn.get()) {
+		  var profile = auth2.currentUser.get().getBasicProfile();
+		  console.log('ID: ' + profile.getId());
+		  console.log('Full Name: ' + profile.getName());
+		  console.log('Given Name: ' + profile.getGivenName());
+		  console.log('Family Name: ' + profile.getFamilyName());
+		  console.log('Image URL: ' + profile.getImageUrl());
+		  console.log('Email: ' + profile.getEmail());
+		}
     		},
               function(err) { console.error("Error signing in", err); });
   }
