@@ -151,7 +151,7 @@ map.data.setControls(['Point', 'LineString', 'Polygon']);
 map.data.setControlPosition(google.maps.ControlPosition.TOP_CENTER);
 map.data.setStyle( {
 	icon: 'http://maps.google.com/mapfiles/ms/icons/red.png',
-	editable: true,
+	editable: false,
 //	icon: {
 //            path: google.maps.SymbolPath.CIRCLE,
 //            scale: 5,
@@ -160,9 +160,9 @@ map.data.setStyle( {
 //          },
     fillColor: '#ff000020',
     strokeColor: '#ff000060',
-    strokeWeight: 4,
-	fillOpacity: 0.6,
-	strokeOpacity: 0.8
+    strokeWeight: 2,
+	fillOpacity: 0.7,
+	strokeOpacity: 0.9
   });
   
 $(document).on("click", "#remove_btn", function(event){
@@ -254,7 +254,7 @@ listenerAddFeature = map.data.addListener('addfeature', function(event) {
 		$("#myModal").modal({show: true, backdrop: "static"});
 	}
 	else {
-		$('#gtag').empty().append('Line');
+		$('#gtag').empty().append('<option value="">Line</option>');
 		document.getElementById('modtitle').innerHTML = "SiteID: " + pSiteID;
 		$("#myModal").modal({show: true, backdrop: "static"});
 		
