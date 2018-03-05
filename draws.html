@@ -160,7 +160,18 @@ $(document).on("click", "#remove_btn", function(event){
 });
 
 $(document).on("click", "#close_btn", function(event){
-    alert("close_btn!"); 
+	var gType = event.feature.getGeometry().getType();
+	if (gType == "Point") {
+		console.log("point....");
+	}
+	else if (gType == "Polygon") {
+		console.log("polygon....");
+	}
+	else if (gType == "Polygon") {
+		console.log("polygon....");
+	}
+   
+	
 });
 	
 //function setProperties(pevent) { 
@@ -1029,7 +1040,7 @@ Label.prototype.draw = function() {
 		<button id="remove_btn" type="button" class="btn btn-default" data-dismiss="modal">Remove</button>
 		</div>
 		<div style="float:Right">
-        <button id="close_btn" type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button id="close_btn" type="button" class="btn btn-primary" data-dismiss="modal">Add</button>
 		</div>
         </div>
       </div>
