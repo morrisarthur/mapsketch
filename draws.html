@@ -159,6 +159,10 @@ $(document).on("click", "#remove_btn", function(event){
     map.data.remove(pevent.feature); 
 });
 
+$(document).on("click", "#close_btn", function(event){
+    alert("close_btn!"); 
+});
+	
 //function setProperties(pevent) { 
 $('#myModal').on('hidden.bs.modal', function () {
 
@@ -1025,7 +1029,7 @@ Label.prototype.draw = function() {
 		<button id="remove_btn" type="button" class="btn btn-default" data-dismiss="modal">Remove</button>
 		</div>
 		<div style="float:Right">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+        <button id="close_btn" type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
 		</div>
         </div>
       </div>
