@@ -150,7 +150,7 @@ map.data.setStyle();
 map.data.setControls(['Point', 'LineString', 'Polygon']);
 map.data.setControlPosition(google.maps.ControlPosition.TOP_CENTER);
 map.data.setStyle( {
-	icon: 'http://maps.google.com/mapfiles/ms/icons/red.png',
+	icon: 'https://maps.google.com/mapfiles/marker.png',
 	editable: false,
 //	icon: {
 //            path: google.maps.SymbolPath.CIRCLE,
@@ -178,7 +178,14 @@ $(document).on("click", "#close_btn", function(event){
 	var ilink;
 	if (gType == "Point") {
 		ilink = "https://maps.google.com/mapfiles/marker" + document.getElementById('gtag').value.substring(0,1) + ".png";
-		map.data.setStyle( {icon: ilink});
+		map.data.setStyle( {
+			icon: ilink,
+			fillColor: '#ff000020',
+    			strokeColor: '#ff000060',
+    			strokeWeight: 2,
+			fillOpacity: 0.7,
+			strokeOpacity: 0.9
+		});
 
 		kmlprefix = '<Point><coordinates>';
 		kmlsuffix = '</Point>';
