@@ -963,14 +963,13 @@ function httpGet(theUrl)
 		  pIcon = "w_blue"
 	  }
     insertsql = "Insert Into 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q (fFillColor, fBorderColor, Icon, DoneBy, DoneOn, KmlString,siteid,fName,fDescription,fType) VALUES ('#ff000020','#ff000060','" + pIcon + "','" + googleUserEmail + "','" + doneOn.toLocaleString("en-US") + "','" + fkml + "'," + fpsiteid + ", '" + ffName  + "', '" + ffDescription + "', '" + ffType + "')";
-    console.log('sqlsent: ' + insertsql)   
+//    console.log('sqlsent: ' + insertsql)   
     return gapi.client.fusiontables.query.sql({
       "sql": insertsql
     })
         .then(function(response) {
                 // Handle the results here (response.result has the parsed body).
                 console.log("Response", response);
-	    	console.log("ResponseStatus: " + response);
               },
               function(err) { 
 			alert("Oooops: " + err);
