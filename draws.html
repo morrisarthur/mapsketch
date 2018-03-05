@@ -175,10 +175,14 @@ $(document).on("click", "#close_btn", function(event){
 	var jsonprefix;
 	var kmlstring;
 	if (gType == "Point") {
-		console.log("point....");
+		kmlprefix = '<Point><coordinates>';
+		kmlsuffix = '</Point>';
+		jsonprefix = '{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Point","coordinates":';
 	}
 	else if (gType == "Polygon") {
-		console.log("polygon....");
+		kmlprefix = '<Polygon><outerBoundaryIs><LinearRing><coordinates>';
+		kmlsuffix = '</coordinates></LinearRing></outerBoundaryIs></Polygon>';
+		jsonprefix = '{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Polygon","coordinates":';
 	}
 	else if (gType == "LineString") {
 		kmlprefix = '<LineString><coordinates>';
@@ -241,6 +245,12 @@ listenerAddFeature = map.data.addListener('addfeature', function(event) {
 		// open dialog to prompt for properties
 		document.getElementById('modtitle').innerHTML = "SiteID: " + pSiteID;
 		$("#myModal").modal({show: true, backdrop: "static"});
+	}
+	else {
+		$('#gtag').empty()
+		document.getElementById('modtitle').innerHTML = "SiteID: " + pSiteID;
+		$("#myModal").modal({show: true, backdrop: "static"});
+		
 	}
 	
 	
