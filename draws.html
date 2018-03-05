@@ -86,6 +86,7 @@ var infoWindow2 = new google.maps.InfoWindow;
 var watchID;
 var geoLoc;
 var pevent;
+var pfeature;
 var pSiteID;
 var pP12;
 var listenerAddFeature;
@@ -169,7 +170,7 @@ $(document).on("click", "#remove_btn", function(event){
 });
 
 $(document).on("click", "#close_btn", function(event){
-	var gType = pevent.feature.getGeometry().getType();
+	var gType = pfeature.getGeometry().getType();
 	var kmlprefix;
 	var kmlsuffix;
 	var jsonprefix;
@@ -177,27 +178,27 @@ $(document).on("click", "#close_btn", function(event){
 	if (gType == "Point") {
 		kmlprefix = '<Point><coordinates>';
 		kmlsuffix = '</Point>';
-		jsonprefix = '{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Point","coordinates":';
+		jsonprefix = '"type":"Feature","geometry":{"type":"Point","coordinates":';
 	}
 	else if (gType == "Polygon") {
 		kmlprefix = '<Polygon><outerBoundaryIs><LinearRing><coordinates>';
 		kmlsuffix = '</coordinates></LinearRing></outerBoundaryIs></Polygon>';
-		jsonprefix = '{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"Polygon","coordinates":';
+		jsonprefix = '"type":"Feature","geometry":{"type":"Polygon","coordinates":';
 	}
 	else if (gType == "LineString") {
 		kmlprefix = '<LineString><coordinates>';
 		kmlsuffix = '</coordinates></LineString>';
-		jsonprefix = '{"type":"FeatureCollection","features":[{"type":"Feature","geometry":{"type":"LineString","coordinates":';
+		jsonprefix = '"type":"Feature","geometry":{"type":"LineString","coordinates":';
 	}
 	map.data.toGeoJson(function(data){
 		var geoString = JSON.stringify(data);
-		console.log(geoString);
-		kmlstring =  geoString.replace(jsonprefix, kmlprefix);
+		var iprefix =  geoString.lastIndexOf(jsonprefix);
+		kmlstring = geoString.substring(iprefix + jsonprefix.length);
 		kmlstring = kmlstring.slice(0,kmlstring.search("}"));
 		kmlstring =  kmlstring.replace(/\],/g, " ");
 		kmlstring =  kmlstring.replace(/\]/g, "");
 		kmlstring =  kmlstring.replace(/\[/g, "");
-		kmlstring = kmlstring + kmlsuffix;
+		kmlstring = kmlprefix + kmlstring + kmlsuffix;
 	})
 	execute(kmlstring, pSiteID,document.getElementById('gtag').value,document.getElementById('gdetails').value,pevent.feature.getGeometry().getType());
 
@@ -219,6 +220,7 @@ pevent.feature.setProperty('caption', document.getElementById('gdetails').value)
 listenerAddFeature = map.data.addListener('addfeature', function(event) {
 	authenticate().then(loadClient)
 	pevent = event;
+	pfeature = event.feature;
 	document.getElementById('gtag').value = "";
 	document.getElementById('gdetails').value = ""
 	var gType = event.feature.getGeometry().getType();
