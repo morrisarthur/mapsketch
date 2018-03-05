@@ -160,7 +160,7 @@ $(document).on("click", "#remove_btn", function(event){
 });
 
 $(document).on("click", "#close_btn", function(event){
-	var gType = event.feature.getGeometry().getType();
+	var gType = pevent.feature.getGeometry().getType();
 	if (gType == "Point") {
 		console.log("point....");
 	}
