@@ -177,7 +177,7 @@ $(document).on("click", "#close_btn", function(event){
 	var kmlstring;
 	var ilink;
 	if (gType == "Point") {
-		ilink = "http://maps.google.com/mapfiles/ms/icons/marker" + document.getElementById('gtag').value.substring(0,1) + ".png";
+		ilink = "https://maps.google.com/mapfiles/marker" + document.getElementById('gtag').value.substring(0,1) + ".png";
 		map.data.setStyle( {icon: ilink});
 
 		kmlprefix = '<Point><coordinates>';
