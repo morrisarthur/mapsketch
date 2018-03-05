@@ -957,7 +957,7 @@ function httpGet(theUrl)
   function execute(fkml,fpsiteid,ffName,ffDescription,ffType) {
 	  var doneOn = new Date();
 	  var pIcon = ffName.substring(0,1).toLowerCase();
-	  if pIcon == "w" {
+	  if (pIcon == "w") {
 		  pIcon = "w_blue"
 	  }
     insertsql = "Insert Into 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q (fFillColor, fBorderColor, Icon, DoneBy, DoneOn, KmlString,siteid,fName,fDescription,fType) VALUES ('#ff000020',#ff000060,'" + pIcon + "','" + googleUserEmail + "','" + doneOn.toLocaleString("en-US") + "','" + fkml + "'," + fpsiteid + ", '" + ffName  + "', '" + ffDescription + "', '" + ffType + "')";
