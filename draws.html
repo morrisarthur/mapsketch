@@ -239,7 +239,8 @@ listenerAddFeature = map.data.addListener('addfeature', function(event) {
 			}
 			else {
 				verticesOutside ++;
-			}	
+			}
+		console.log("point chosen");
 	}
 	else if (gaGeomType == 'LineString') {
 		var queryp;
@@ -258,8 +259,9 @@ listenerAddFeature = map.data.addListener('addfeature', function(event) {
 			}
 			else {
 				verticesOutside ++;
-			}	
+			}
 	}
+				console.log("ls chosen");
 
 	
 		
@@ -287,7 +289,7 @@ listenerAddFeature = map.data.addListener('addfeature', function(event) {
 	if (verticesOutside > 0) {
 		alert(verticesOutside + ' Alert: Part of sketch is outside target parcel ' + pP12);
 		}
-	
+	console.log("polygon chosen");
 
 
 });  //end of add listener add feature
