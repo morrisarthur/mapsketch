@@ -191,6 +191,7 @@ $(document).on("click", "#close_btn", function(event){
 	}
 	map.data.toGeoJson(function(data){
 		var geoString = JSON.stringify(data);
+		console.log(geoString);
 		kmlstring =  geoString.replace(jsonprefix, kmlprefix);
 		kmlstring = kmlstring.slice(0,kmlstring.search("}"));
 		kmlstring =  kmlstring.replace(/\],/g, " ");
