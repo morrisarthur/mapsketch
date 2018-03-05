@@ -181,7 +181,6 @@ $('#myModal').on('hidden.bs.modal', function () {
 pevent.feature.setProperty('siteid', pSiteID)
 pevent.feature.setProperty('tag', document.getElementById('gtag').value);
 pevent.feature.setProperty('caption', document.getElementById('gdetails').value);
-	console.log("Close???");
 
 })
 //}
@@ -237,7 +236,6 @@ listenerAddFeature = map.data.addListener('addfeature', function(event) {
 			else {
 				verticesOutside ++;
 			}
-		console.log("point chosen");
 	}
 	else if (gaGeomType == 'LineString') {
 		var queryp;
@@ -258,7 +256,6 @@ listenerAddFeature = map.data.addListener('addfeature', function(event) {
 				verticesOutside ++;
 			}
 	}
-				console.log("ls chosen");
 
 	
 		
@@ -282,7 +279,6 @@ listenerAddFeature = map.data.addListener('addfeature', function(event) {
 				verticesOutside ++;
 			}	
 	}
-		console.log("polygon chosen");
 	}
 	if (verticesOutside > 0) {
 		alert(verticesOutside + ' Alert: Part of sketch is outside target parcel ' + pP12);
@@ -908,7 +904,11 @@ function httpGet(theUrl)
   function authenticate() {
     return gapi.auth2.getAuthInstance()
         .signIn({scope: "https://www.googleapis.com/auth/fusiontables https://www.googleapis.com/auth/fusiontables.readonly"})
-        .then(function() { console.log("Sign-in successful"); },
+        .then(function() { 
+	    console.log("Sign-in successful");
+	    var profile = auth2.currentUser.get().getBasicProfile();
+	    console.log('Email: ' + profile.getEmail());
+    		},
               function(err) { console.error("Error signing in", err); });
   }
   function loadClient() {
