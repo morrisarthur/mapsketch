@@ -477,7 +477,7 @@ var ftinfoWindow = new google.maps.InfoWindow();
 }
 });
 google.maps.event.addListener(geoFlayer, 'click', function(e) {
-ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="button" value="Remove This Feature" id="go"></div>');
+ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="button" value="Delete" id="go"></div>');
   ftinfoWindow.setPosition(e.latLng);
   ftinfoWindow.open(map);
 
@@ -485,7 +485,7 @@ ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="b
       'click', function() {
 	var start = document.getElementById('begin').value;
 	  console.log(e.infoWindowHtml);
-	alert("Feature Removal coming soon...");
+	alert("Feature Deletion coming soon...");
 	});
   });
 
