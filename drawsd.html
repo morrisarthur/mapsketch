@@ -481,8 +481,8 @@ ftinfoWindow.setContent(e.infoWindowHtml +
       '<br><label>Howdy:</label> ' +
       '<input type="text" id="begin">' +
       '<input type="button" value="go" id="go">');
-  infoWindow.setPosition(e.latLng);
-  infoWindow.open(map);
+  ftinfoWindow.setPosition(e.latLng);
+  ftinfoWindow.open(map);
 
   google.maps.event.addDomListener(document.getElementById('go'),
       'click', function() {
