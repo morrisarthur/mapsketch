@@ -477,17 +477,15 @@ var ftinfoWindow = new google.maps.InfoWindow();
 }
 });
 google.maps.event.addListener(geoFlayer, 'click', function(e) {
-ftinfoWindow.setContent(e.infoWindowHtml +
-      '<br><label>Howdy:</label> ' +
-      '<input type="text" id="begin">' +
-      '<input type="button" value="go" id="go">');
+ftinfoWindow.setContent(e.infoWindowHtml + '<input type="button" value="Remove This Feature" id="go">');
   ftinfoWindow.setPosition(e.latLng);
   ftinfoWindow.open(map);
 
   google.maps.event.addDomListener(document.getElementById('go'),
       'click', function() {
 	var start = document.getElementById('begin').value;
-	alert("go clicked!");
+	  console.log(e.infoWindowHtml);
+	alert("Feature Removal coming soon...");
 	});
   });
 
