@@ -178,17 +178,7 @@ $(document).on("click", "#close_btn", function(event){
 	var kmlsuffix;
 	var jsonprefix;
 	var kmlstring;
-	var ilink;
 	if (gType == "Point") {
-		ilink = "https://maps.google.com/mapfiles/marker" + document.getElementById('gtag').value.substring(0,1) + ".png";
-		map.data.setStyle( {
-			icon: ilink,
-			fillColor: '#ff000020',
-    			strokeColor: '#ff000060',
-    			strokeWeight: 3,
-			fillOpacity: 0.7,
-			strokeOpacity: 0.9
-		});
 
 		kmlprefix = '<Point><coordinates>';
 		kmlsuffix = '</Point>';
