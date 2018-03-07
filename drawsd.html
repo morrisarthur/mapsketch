@@ -1028,7 +1028,7 @@ function httpGet(theUrl)
                 alert("Delete Request Response: " + response.code());
               },
               function(err) { 
-			alert("Oooops: " + err);
+			alert("Oooops: " + err.message);
 			console.error("Execute error", err); 
 		});
   }
