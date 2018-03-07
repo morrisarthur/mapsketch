@@ -463,8 +463,13 @@ ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="b
 	  if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
 		  console.log("IsSignedIn !");
 		  if (clientLoaded) {
-			  loadClient;
 			  executedelete(hsiteid, hdoneby,hdoneon);
+			  if (confirm("Delete confirmed. Reload?")) {
+			    window.location.reload(false); 
+			  } 
+			  else {
+			    
+			}
 		  }
 		  else {
 			  alert("Not yet ready..try again");
