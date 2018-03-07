@@ -456,7 +456,7 @@ ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="b
 	pos = hstr.indexOf(targ) + targ.length;
 	endpos = hstr.indexOf("<", pos);
 	var hdoneon = hstr.substring(pos,endpos).trim();
-	alert(hdoneby+hsiteid+hdoneon)
+	executedelete(hsiteid, hdoneby,hdoneon);
 	  
 	});
   });
@@ -966,13 +966,30 @@ function httpGet(theUrl)
     })
         .then(function(response) {
                 // Handle the results here (response.result has the parsed body).
-                console.log("Response", response);
+                console.log("Response", response.statusText);
               },
               function(err) { 
-			alert("Oooops: " + err);
+			alert("Oooops: " + response.error());
 			console.error("Execute error", err); 
 		});
-  }	
+  }
+	
+  function executedelete(esiteid, edoneby, edoneon) {
+
+    deletesql = "Delete From 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q Where SiteID = "+ esiteid + " AND DoneBy = '" + edoneby + "' AND DoneOn = '" + edoneon + "'";;
+    console.log('sqlsent: ' + deletesql)   
+    return gapi.client.fusiontables.query.sql({
+      "sql": deletesql
+    })
+        .then(function(response) {
+                // Handle the results here (response.result has the parsed body).
+                alert("Delete Request Response: ", response.error());
+              },
+              function(err) { 
+			alert("Oooops: " + response.error());
+			console.error("Execute error", err); 
+		});
+  }
 	
 function distance(lat1,lon1,lat2,lon2) {
     var R = 6371; // km (change this constant to get miles)
