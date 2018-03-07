@@ -464,16 +464,7 @@ ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="b
 		  console.log("IsSignedIn !");
 		  if (clientLoaded) {
 			  executedelete(hsiteid, hdoneby,hdoneon);
-			  if (confirm("Delete confirmed. Reload?")) {
-//			    window.location.reload(false); 
-				geoFlayer.setMap(null);
-				geoFlayer.setMap(map);
-				  
-			  } 
-			  else {
-			    
-			}
-		  }
+		 }
 		  else {
 			  alert("Not yet ready..try again");
 			  loadClient();
@@ -1016,7 +1007,12 @@ function httpGet(theUrl)
     })
         .then(function(response) {
                 // Handle the results here (response.result has the parsed body).
-               alert("Delete Request Response: " + response.result);
+               	if (confirm("Delete confirmed. Reload?")) {
+			geoFlayer.setMap(null);
+			geoFlayer.setMap(map);
+				  
+		} 
+
 	    	console.log(response.result);
               },
               function(err) { 
