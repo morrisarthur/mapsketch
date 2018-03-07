@@ -95,7 +95,7 @@ var myLatLng = new google.maps.LatLng(0.0, 0.0);
 var blTrackLoc;
 var im = 'https://www.robotwoods.com/dev/misc/bluecircle.png';	
 var googleUserEmail;
-var deleteFeature;
+var clientLoaded;
 
 
 google.maps.event.addDomListener(window, 'load', initialize);
@@ -462,7 +462,12 @@ ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="b
 	var hdoneon = hstr.substring(pos,endpos).trim();	  
 	  if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
 		  console.log("IsSignedIn !");
-		  executedelete(hsiteid, hdoneby,hdoneon);
+		  if (clientLoaded) {
+			  executedelete(hsiteid, hdoneby,hdoneon);
+		  }
+		  else {
+			  alert("client not loaded");
+		  }
 	  }
 	  else {
 		  	  authenticate().then(loadClient);
@@ -964,7 +969,10 @@ function httpGet(theUrl)
 	
   function loadClient() {
     return gapi.client.load("https://content.googleapis.com/discovery/v1/apis/fusiontables/v2/rest")
-        .then(function() { console.log("GAPI client loaded for API"); },
+        .then(function() { 
+	    clientLoaded = true;
+	    console.log("GAPI client loaded for API"); 
+    	},
               function(err) { console.error("Error loading GAPI client for API", err); });
   }
   // Make sure the client is loaded and sign-in is complete before calling this method.
