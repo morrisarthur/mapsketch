@@ -411,7 +411,7 @@ var ftinfoWindow = new google.maps.InfoWindow();
       //Previous select: 'latitude', was 'Latitude,Longitude', used to work...
       select: 'col2',
       from: FTGeof_TableID,
-      where: 'not(Deleted = 1)'
+      where: 'Deleted <> 1'
 
     },
 	options: {
