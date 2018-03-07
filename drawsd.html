@@ -2,12 +2,6 @@
 <html>
 <head>
 
-<button type="buttton" style="display: none" onclick="executedelete()" id="Hidden">Hidden</button>
-<input type="hidden" name="bubba" id="isiteid" value="this is the default">
-<input type="hidden" name="bubba" id="idoneby" value="this is the default">
-<input type="hidden" name="bubba" id="idoneon" value="this is the default">
-	
-	
 <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 <title>Map-based EH Docs - Whatcom </title>
     <style>
@@ -436,37 +430,16 @@ var ftinfoWindow = new google.maps.InfoWindow();
 }
 });
 google.maps.event.addListener(geoFlayer, 'click', function(e) {
-	var pos;
-	var endpos;
-	var targ;
-	  var hstr;
-	  hstr = e.infoWindowHtml;
-	targ = "<b>DoneBy:</b>";
-	pos = hstr.indexOf(targ) + targ.length;
-	endpos = hstr.indexOf("<", pos);
-	var hdoneby = hstr.substring(pos,endpos).trim();
-	document.getElementById("idoneby").value = hdoneby;
+
 	
-	targ = "<b>siteid:</b>";
-	pos = hstr.indexOf(targ) + targ.length;
-	endpos = hstr.indexOf("<", pos);
-	var hsiteid = hstr.substring(pos,endpos).trim();
-	document.getElementById("isiteid").value = hsiteid;
-	
-	 targ = "<b>DoneOn:</b>";
-	pos = hstr.indexOf(targ) + targ.length;
-	endpos = hstr.indexOf("<", pos);
-	pos = hstr.indexOf(targ) + targ.length;
-	endpos = hstr.indexOf("<", pos);
-	var hdoneon = hstr.substring(pos,endpos).trim();
-	document.getElementById("idoneon").value = hdoneon;
-	
-ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="button" value="Delete" id="go"  > <button type="buttton" onclick="document.getElementById(\'Hidden\').click();">Click Me</button></div>');
+ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="button" value="Delete" id="go"  > </div>');
   ftinfoWindow.setPosition(e.latLng);
   ftinfoWindow.open(map);
 
   google.maps.event.addDomListener(document.getElementById('go'),
       'click', function() {
+	  authenticate().then(loadClient)
+
 	  console.log(e.infoWindowHtml);
 	  var pos;
 	var endpos;
