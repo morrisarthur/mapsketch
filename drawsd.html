@@ -952,7 +952,6 @@ function httpGet(theUrl)
   function authenticate() {
     return gapi.auth2.getAuthInstance()
         .signIn({scope: "https://www.googleapis.com/auth/fusiontables https://www.googleapis.com/auth/fusiontables.readonly"})
-	.isSignedIn.listen(updateSigninStatus)
         .then(function() { 
 	    console.log("Sign-in successful");
     		},
@@ -960,13 +959,6 @@ function httpGet(theUrl)
 	updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
   }
 	
-function updateSigninStatus(isSignedIn) {
-// When signin status changes, this function is called.
-// If the signin status is changed to signedIn, we make an API call.
-if (isSignedIn) {
-  makeApiCall();
-}
-}
 
 	
   function loadClient() {
