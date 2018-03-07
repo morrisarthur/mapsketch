@@ -1025,10 +1025,10 @@ function httpGet(theUrl)
     })
         .then(function(response) {
                 // Handle the results here (response.result has the parsed body).
-                alert("Delete Request Response: " + response.error());
+                alert("Delete Request Response: " + response.code());
               },
               function(err) { 
-			alert("Oooops: " + response.error());
+			alert("Oooops: " + err.message());
 			console.error("Execute error", err); 
 		});
   }
