@@ -460,7 +460,13 @@ ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="b
 	pos = hstr.indexOf(targ) + targ.length;
 	endpos = hstr.indexOf("<", pos);
 	var hdoneon = hstr.substring(pos,endpos).trim();	  
-	  authenticate().then(loadClient).then(	executedelete(hsiteid, hdoneby,hdoneon));
+	  authenticate().then(loadClient)
+	  if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
+		  executedelete(hsiteid, hdoneby,hdoneon);
+	  }
+	  else {
+		  alert("Ooops: Try delete now...")
+	  }
 	  
 	});
   });
@@ -946,13 +952,23 @@ function httpGet(theUrl)
   function authenticate() {
     return gapi.auth2.getAuthInstance()
         .signIn({scope: "https://www.googleapis.com/auth/fusiontables https://www.googleapis.com/auth/fusiontables.readonly"})
+	.isSignedIn.listen(updateSigninStatus)
         .then(function() { 
 	    console.log("Sign-in successful");
-
-
     		},
-              function(err) { console.error("Error signing in", err); });
+          function(err) { console.error("Error signing in", err); });
+	updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
   }
+	
+function updateSigninStatus(isSignedIn) {
+// When signin status changes, this function is called.
+// If the signin status is changed to signedIn, we make an API call.
+if (isSignedIn) {
+  makeApiCall();
+}
+}
+
+	
   function loadClient() {
     return gapi.client.load("https://content.googleapis.com/discovery/v1/apis/fusiontables/v2/rest")
         .then(function() { console.log("GAPI client loaded for API"); },
