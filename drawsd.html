@@ -1018,7 +1018,7 @@ function httpGet(theUrl)
 	var edoneon = document.getElementById("idoneon").value ;
 	  
 
-    deletesql = "Delete From 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q Where siteID = "+ esiteid + " AND DoneBy = '" + edoneby + "' AND DoneOn = '" + edoneon + "'";;
+    deletesql = "Delete From 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q Where siteid = "+ esiteid + " AND DoneBy = '" + edoneby + "' AND DoneOn = '" + edoneon + "'";;
     console.log('sqlsent: ' + deletesql)   
     return gapi.client.fusiontables.query.sql({
       "sql": deletesql
