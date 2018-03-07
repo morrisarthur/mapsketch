@@ -459,7 +459,8 @@ ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="b
 	endpos = hstr.indexOf("<", pos);
 	pos = hstr.indexOf(targ) + targ.length;
 	endpos = hstr.indexOf("<", pos);
-	var hdoneon = hstr.substring(pos,endpos).trim();	  
+	var hdoneon = hstr.substring(pos,endpos).trim();
+	  ftinfoWindow.close();
 	  if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
 		  console.log("IsSignedIn !");
 		  if (clientLoaded) {
