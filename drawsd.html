@@ -489,9 +489,6 @@ ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="b
 	pos = hstr.indexOf(targ) + targ.length;
 	endpos = hstr.indexOf("<", pos);
 	var hdoneon = hstr.substring(pos,endpos).trim();
-	  
-	  
-	
 	executedelete(hsiteid, hdoneby,hdoneon);
 	  
 	});
@@ -1012,11 +1009,7 @@ function httpGet(theUrl)
 		});
   }
 	
-  function executedelete() {
-	var esiteid = document.getElementById("isiteid").value ;
-	var edoneby = document.getElementById("idoneby").value ;
-	var edoneon = document.getElementById("idoneon").value ;
-	  
+  function executedelete(esiteid,edoneby,edoneon) {
 
     deletesql = "Delete From 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q Where siteid = "+ esiteid + " AND DoneBy = '" + edoneby + "' AND DoneOn = '" + edoneon + "'";;
     console.log('sqlsent: ' + deletesql)   
@@ -1025,10 +1018,11 @@ function httpGet(theUrl)
     })
         .then(function(response) {
                 // Handle the results here (response.result has the parsed body).
-                alert("Delete Request Response: " + response.statusText);
+               alert("Delete Request Response: " + response.result);
+	    	console.log(response.result);
               },
               function(err) { 
-			alert("Oooops: " + err.result.error.message);
+			alert("Error: " + err.result.error.message);
 			console.error("Execute error", err); 
 		});
   }
