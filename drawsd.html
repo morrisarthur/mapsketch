@@ -465,8 +465,8 @@ ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="b
 		  executedelete(hsiteid, hdoneby,hdoneon);
 	  }
 	  else {
-		  	  authenticate().then(loadClient)
-			alert("Ooops: Try delete now...")
+		  	  authenticate().then(loadClient);
+			console.log("Ooops: Try delete now...");
 	  }
 	  
 	});
