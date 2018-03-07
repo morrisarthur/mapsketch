@@ -460,12 +460,13 @@ ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="b
 	pos = hstr.indexOf(targ) + targ.length;
 	endpos = hstr.indexOf("<", pos);
 	var hdoneon = hstr.substring(pos,endpos).trim();	  
-	  authenticate().then(loadClient)
 	  if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
+		  console.log("IsSignedIn !");
 		  executedelete(hsiteid, hdoneby,hdoneon);
 	  }
 	  else {
-		  alert("Ooops: Try delete now...")
+		  	  authenticate().then(loadClient)
+			alert("Ooops: Try delete now...")
 	  }
 	  
 	});
