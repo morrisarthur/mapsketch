@@ -433,6 +433,29 @@ var ftinfoWindow = new google.maps.InfoWindow();
 }
 });
 google.maps.event.addListener(geoFlayer, 'click', function(e) {
+	var pos;
+	var endpos;
+	var targ;
+	  var hstr;
+	  hstr = e.infoWindowHtml;
+	targ = "<b>DoneBy:</b>";
+	pos = hstr.indexOf(targ) + targ.length;
+	endpos = hstr.indexOf("<", pos);
+	var hdoneby = hstr.substring(pos,endpos).trim();
+
+	targ = "<b>siteid:</b>";
+	pos = hstr.indexOf(targ) + targ.length;
+	endpos = hstr.indexOf("<", pos);
+	var hsiteid = hstr.substring(pos,endpos).trim();
+	  
+	 targ = "<b>DoneOn:</b>";
+	pos = hstr.indexOf(targ) + targ.length;
+	endpos = hstr.indexOf("<", pos);
+	pos = hstr.indexOf(targ) + targ.length;
+	endpos = hstr.indexOf("<", pos);
+	var hdoneon = hstr.substring(pos,endpos).trim();
+	document.getElementById("bubba").value = hdoneon;
+	
 ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="button" value="Delete" id="go"  > <button type="buttton" onclick="document.getElementById(\'Hidden\').click();">Click Me</button></div>');
   ftinfoWindow.setPosition(e.latLng);
   ftinfoWindow.open(map);
@@ -462,7 +485,7 @@ ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="b
 	endpos = hstr.indexOf("<", pos);
 	var hdoneon = hstr.substring(pos,endpos).trim();
 	  
-	  document.getElementById("bubba").value = "bubba changed"
+	  
 	
 	executedelete(hsiteid, hdoneby,hdoneon);
 	  
