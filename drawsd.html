@@ -983,7 +983,7 @@ function httpGet(theUrl)
                 console.log("Response", response.statusText);
               },
               function(err) { 
-			alert("Oooops: " + response.error());
+			alert("Oooops: " + err.result.error.message);
 			console.error("Execute error", err); 
 		});
   }
