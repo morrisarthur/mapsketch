@@ -465,7 +465,10 @@ ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="b
 		  if (clientLoaded) {
 			  executedelete(hsiteid, hdoneby,hdoneon);
 			  if (confirm("Delete confirmed. Reload?")) {
-			    window.location.reload(false); 
+//			    window.location.reload(false); 
+				geoFlayer.setMap(null);
+				geoFlayer.setMap(map);
+				  
 			  } 
 			  else {
 			    
