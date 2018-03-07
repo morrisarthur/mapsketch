@@ -438,10 +438,8 @@ ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="b
 
   google.maps.event.addDomListener(document.getElementById('go'),
       'click', function() {
-	  authenticate().then(loadClient)
-
-	  console.log(e.infoWindowHtml);
-	  var pos;
+	console.log(e.infoWindowHtml);
+	var pos;
 	var endpos;
 	var targ;
 	  var hstr;
@@ -461,8 +459,8 @@ ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="b
 	endpos = hstr.indexOf("<", pos);
 	pos = hstr.indexOf(targ) + targ.length;
 	endpos = hstr.indexOf("<", pos);
-	var hdoneon = hstr.substring(pos,endpos).trim();
-	executedelete(hsiteid, hdoneby,hdoneon);
+	var hdoneon = hstr.substring(pos,endpos).trim();	  
+	  authenticate().then(loadClient).then(	executedelete(hsiteid, hdoneby,hdoneon));
 	  
 	});
   });
