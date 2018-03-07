@@ -993,7 +993,7 @@ function httpGet(theUrl)
   function executedelete(esiteid,edoneby,edoneon) {
 
 //    deletesql = "Delete From 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q Where siteid = "+ esiteid + " AND DoneBy = '" + edoneby + "' AND DoneOn = '" + edoneon + "'";;
-     deletesql = "UPDATE 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q Deleted = 'Y' Where siteid = "+ esiteid + " AND DoneBy = '" + edoneby + "' AND DoneOn = '" + edoneon + "'";;
+     deletesql = "UPDATE 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q SET Deleted = 'Y' WHERE siteid = "+ esiteid + " AND DoneBy = '" + edoneby + "' AND DoneOn = '" + edoneon + "'";;
 
 	  console.log('sqlsent: ' + deletesql)   
     return gapi.client.fusiontables.query.sql({
