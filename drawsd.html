@@ -461,6 +461,8 @@ ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="b
 	pos = hstr.indexOf(targ) + targ.length;
 	endpos = hstr.indexOf("<", pos);
 	var hdoneon = hstr.substring(pos,endpos).trim();
+	  
+	  document.getElementById("bubba").value = "bubba changed"
 	
 	executedelete(hsiteid, hdoneby,hdoneon);
 	  
