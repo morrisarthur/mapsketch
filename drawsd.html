@@ -338,56 +338,7 @@ listenerAddFeature = map.data.addListener('addfeature', function(event) {
 
 });  //end of add listener add feature
 
-map.data.addListener('click', function(event) {
-//	console.log(event.feature.getGeometry().getType() + ': ' + event.feature.getProperty('caption'));
-	pevent = event;
 
-//	setProperties(event);
-	var gType = event.feature.getGeometry().getType();
-	if (gType == "Point") {
-		$("#mod-input").removeClass('hidden');
-		$('#gtag').empty().append('<option value="">---Select Tag---</option>');
-		$('#gtag').append('<option value="Septic Tank">Septic Tank</option>');
-		$('#gtag').append('<option value="Pump Tank">Pump Tank</option>');
-		$('#gtag').append('<option value="Distribution Box">Distribution Box</option>');
-		$('#gtag').append('<option value="Water Intake">Water Intake</option>');
-
-//		setProperties(event);
-		// open dialog to prompt for properties
-		document.getElementById('gtag').value = event.feature.getProperty('tag');
-		document.getElementById('gdetails').value = event.feature.getProperty('caption');	
-		document.getElementById('modtitle').innerHTML = "SiteID: " + event.feature.getProperty('siteid');
-		$("#myModal").modal({show: true, backdrop: "static"});
-	}
-	else if (gType == "Polygon") {
-		$("#mod-input").removeClass('hidden');
-		$('#gtag').empty().append('<option value="">---Select Tag---</option>');
-		$('#gtag').append('<option value="Drainfield">Drainfield</option>');
-		$('#gtag').append('<option value="Sand Filter">Sand Filter</option>');
-		$('#gtag').append('<option value="Building served by OSS">Building served by OSS</option>');
-		$('#gtag').append('<option value="Other Building">Other Building</option>');
-		$('#gtag').append('<option value="Impervious Area">Impervious Area</option>');
-//		setProperties(event);
-		// open dialog to prompt for properties
-		document.getElementById('gtag').value = event.feature.getProperty('tag');
-		document.getElementById('gdetails').value = event.feature.getProperty('caption');	
-		document.getElementById('modtitle').innerHTML = "SiteID: " + event.feature.getProperty('siteid');
-		$("#myModal").modal({show: true, backdrop: "static"});
-	}
-	else if (gType == "LineString") {
-//		alert(document.getElementById('gtag').display);
-		$("#mod-input").addClass('hidden');
-		$("#myModal").modal({show: true, backdrop: "static"});
-	}
-		
-		
-})
-	
-//	 infoWindow2.close();
-//     infoWindow2.setContent('Site: ' + event.feature.getProperty('siteid') + '<br>' + event.feature.getProperty('caption'));
-//    infoWindow2.setPosition(event.latLng);
-//     infoWindow2.setOptions({pixelOffset: new google.maps.Size(0,-34)});
-//     infoWindow2.open(map);	}); 
 
   google.maps.LatLng.prototype.kmTo = function(a){ 
     var e = Math, ra = e.PI/180; 
@@ -484,7 +435,30 @@ ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="b
   google.maps.event.addDomListener(document.getElementById('go'),
       'click', function() {
 	  console.log(e.infoWindowHtml);
-	alert("Feature Deletion coming soon...");
+	  var pos;
+	var endpos;
+	var targ;
+	  var hstr;
+	  hstr = e.infoWindowHtml;
+	targ = "<b>DoneBy:</b>";
+	pos = hstr.indexOf(targ) + targ.length;
+	endpos = hstr.indexOf("<", pos);
+	var hdoneby = hstr.substring(pos,endpos).trim());
+
+	targ = "<b>siteid:</b>";
+	pos = hstr.indexOf(targ) + targ.length;
+	endpos = hstr.indexOf("<", pos);
+	var hsiteid = hstr.substring(pos,endpos).trim());
+	  
+	 targ = "<b>DoneOn:</b>";
+	pos = hstr.indexOf(targ) + targ.length;
+	endpos = hstr.indexOf("<", pos);
+	targ = "<b>DoneBy:</b>";
+	pos = hstr.indexOf(targ) + targ.length;
+	endpos = hstr.indexOf("<", pos);
+	var hdoneon = hstr.substring(pos,endpos).trim());
+	alert(hdoneby+hsiteid+hdoneon)
+	  
 	});
   });
 
