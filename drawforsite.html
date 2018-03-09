@@ -352,7 +352,7 @@ listenerAddFeature = map.data.addListener('addfeature', function(event) {
 alert("waddup");
 if (pSiteID > 0) { 
 	alert("here");
-  changeQueryGf(pSiteID)
+  changeQueryGf(pSiteID);
   }
 else if (pP12 != null) {
   changeQuery(pP12);
@@ -614,7 +614,7 @@ if (pSiteID == null  || pSiteID == 'undefined' ) {
 
 function changeQueryGf(term) {
 //	globeterm = term
-
+alert("inchangeQueryGf");
  var queryText = encodeURIComponent("SELECT 'siteid'  FROM " + FTGeof_TableID + " WHERE 'siteid' = " + term );
 
 var query = new google.visualization.Query('https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
