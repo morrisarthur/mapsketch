@@ -349,9 +349,8 @@ listenerAddFeature = map.data.addListener('addfeature', function(event) {
     } 
     return dist; 
   } 	 
-alert("waddup");
+
 if (pSiteID > 0) { 
-	alert("here");
   changeQueryGf(pSiteID);
   }
 else if (pP12 != null) {
@@ -617,7 +616,7 @@ function changeQueryGf(term) {
 alert("inchangeQueryGf");
 	var queryText = "SELECT Parcel12  FROM " + FTGeof_TableID + " WHERE siteid = " + term ;
 	alert(queryText);
- queryText = encodeURIComponent(queryText );
+// queryText = encodeURIComponent(queryText );
 	alert(queryText);
 
 var query = new google.visualization.Query('https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
