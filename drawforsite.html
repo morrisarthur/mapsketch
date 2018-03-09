@@ -614,7 +614,7 @@ if (pSiteID == null  || pSiteID == 'undefined' ) {
 function changeQueryGf(term) {
 //	globeterm = term
 
-	var ftqueryText = "SELECT 'Parcel12'  FROM " + FTGeof_TableID + " WHERE siteid = " + term ;
+	var ftqueryText = "SELECT 'Parcel12'  FROM " + FTGeof_TableID + " WHERE fName = 'Septic Tank' AND siteid = " + term ;
 	ftqueryText = encodeURIComponent(ftqueryText);
 	alert(ftqueryText);
 
