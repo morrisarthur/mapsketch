@@ -120,8 +120,6 @@ map = new google.maps.Map(document.getElementById('map_canvas'), {
 ///Default to top-down view
 map.setTilt(0);
 
-	alert("waddusp");
-
 // Get URL parameter
 pP12 = getAllUrlParams().p;
 pSiteID = getAllUrlParams().s;
@@ -616,10 +614,10 @@ if (pSiteID == null  || pSiteID == 'undefined' ) {
 function changeQueryGf(term) {
 	globeterm = term
 
- var queryText = encodeURIComponent("SELECT siteid  FROM " + FTGeof_TableID + " WHERE 'siteid' = " + term );
+ var queryText = encodeURIComponent("SELECT 'siteid'  FROM " + FTGeof_TableID + " WHERE 'siteid' = " + term );
 
 var query = new google.visualization.Query('https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
-console.log(querytext);
+alert(querytext);
 query.send(zoomToGf);
 
 }
