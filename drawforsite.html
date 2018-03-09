@@ -618,12 +618,13 @@ function changeQueryGf(term) {
  var queryText = encodeURIComponent("SELECT siteid  FROM " + FTGeof_TableID + " WHERE 'siteid' = " + term );
 
 var query = new google.visualization.Query('https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
-
+console.log(querytext);
 query.send(zoomToGf);
 
 }
 
 function zoomToGf(response) {
+	console.log(response);
   if (!response) {
     alert('no response');
     return;
