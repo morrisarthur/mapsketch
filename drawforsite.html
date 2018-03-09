@@ -352,7 +352,7 @@ listenerAddFeature = map.data.addListener('addfeature', function(event) {
   } 	 
 
 if (pSiteID > 0) { 
-  changeQueryGf(pP12);
+  changeQueryGf(pSiteID);
   }
 else if (pP12 != null) {
   changeQuery(pP12);
@@ -613,7 +613,7 @@ if (pSiteID == null  || pSiteID == 'undefined' ) {
 }
 
 function changeQueryGf(term) {
- var queryText = encodeURIComponent("SELECT 'Lat', 'Lon'  FROM " + FT_TableID + " WHERE 'Parcel12' STARTS WITH " + "'" + term + "'");
+ var queryText = encodeURIComponent("SELECT 'KmlString'  FROM " + FTGeof_TableID + " WHERE 'siteid' = " + term );
  
  
 //alert(queryText)
@@ -639,42 +639,17 @@ function zoomToGf(response) {
   numCols = response.getDataTable().getNumberOfColumns();
 
   var bounds = new google.maps.LatLngBounds();
-  var numResults = 0;
-  for (i = 0; i < numRows; i++) {
-    if (!isNaN(parseFloat(response.getDataTable().getValue(i, 0))) && !isNaN(parseFloat(response.getDataTable().getValue(i, 1)))) {
-      var point = new google.maps.LatLng(
-        parseFloat(response.getDataTable().getValue(i, 0)),
-        parseFloat(response.getDataTable().getValue(i, 1)));
-      numResults++;
+
+      var point = new google.maps.LatLng(-122.31539905071259,48.730220971482154);
+ 
       bounds.extend(point);
     }
   }
 // alert("bounds =" +bounds)
   // zoom to the bounds
 //  alert("numResults="+numResults)
-  if (numResults > 1) {
-  map.fitBounds(bounds);
-  	layer.setOptions({
-    query: {
-         select: 'Prop_ID',
-      from: FT_TableID
-    },
-	options: {
-        styleId: 2,
-        templateId: 2
-      },
-	styles: [{
-	//'Parcel12' contains " + "'" + term + "'"
-      where: "'Parcel12' STARTS WITH " + "'" + globeterm + "'",
-      polygonOptions: {
-        strokeWeight: 6,
-//		strokeColor: '#0000FF',
-		strokeOpacity: 0.8		
-      }
-    }]
-	})
-	}
-  else if (numResults == 1) {
+
+if (numResults == 1) {
 	map.setCenter(point);
 	map.fitBounds(bounds);
 //	alert("zoom="+map.zoom)
