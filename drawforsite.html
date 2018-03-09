@@ -615,6 +615,7 @@ function changeQueryGf(term) {
 //	globeterm = term
 alert("inchangeQueryGf");
 	var ftqueryText = "SELECT Parcel12  FROM " + FTGeof_TableID + " WHERE siteid = " + term ;
+	ftqueryText = encodeURIComponent(ftqueryText);
 	alert(ftqueryText);
 
  
@@ -625,7 +626,7 @@ ftquery.send(zoomToGf);
 }
 
 function zoomToGf(response) {
-console.log("response" , response);
+console.log("response");
 	alert("response");
   if (!response) {
     alert('no response');
