@@ -619,9 +619,10 @@ alert("inchangeQueryGf");
 // queryText = encodeURIComponent(queryText );
 	alert(queryText);
 
-var query = new google.visualization.Query('https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
+var ftquery = new google.visualization.Query('https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
 alert(querytext);
-query.send(zoomToGf);
+	alert(ftquery);
+ftquery.send(zoomToGf);
 
 }
 
