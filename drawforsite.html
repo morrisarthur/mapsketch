@@ -613,28 +613,23 @@ if (pSiteID == null  || pSiteID == 'undefined' ) {
 }
 
 function changeQueryGf(term) {
-	gfterm = term;
-
-	var ftqueryText = "SELECT 'KmlString'  FROM " + FTGeof_TableID + " WHERE fName = 'Septic Tank' AND siteid = " + term ;
-	alert(ftqueryText);
-	ftqueryText = encodeURIComponent(ftqueryText);
-
+ var queryText = encodeURIComponent("SELECT 'Lat', 'Lon'  FROM " + FT_TableID + " WHERE 'Parcel12' STARTS WITH " + "'" + term + "'");
  
-var ftquery = new google.visualization.Query('https://www.google.com/fusiontables/gvizdata?tq=' + ftqueryText);
+ 
+//alert(queryText)
+var query = new google.visualization.Query('https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
 
-ftquery.send(zoomToGf);
+query.send(zoomTo);
 
 }
 
 function zoomToGf(response) {
-	console.log(response);
-
   if (!response) {
-//    alert('no response');
+    alert('no response');
     return;
   }
   if (response.isError()) {
-//    alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+    alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
     return;
   }
   FTresponse = response;
@@ -642,27 +637,50 @@ function zoomToGf(response) {
   //http://code.google.com/apis/visualization/documentation/reference.html#QueryResponse
   numRows = response.getDataTable().getNumberOfRows();
   numCols = response.getDataTable().getNumberOfColumns();
-console.log("numrows", numRows);
-	console.log(response);
+
   var bounds = new google.maps.LatLngBounds();
   var numResults = 0;
-
-      var point = new google.maps.LatLng(-122.31539905071259,48.730220971482154);
-//      bounds.extend(point);
-
-//alert("numResults", numResults);
+  for (i = 0; i < numRows; i++) {
+    if (!isNaN(parseFloat(response.getDataTable().getValue(i, 0))) && !isNaN(parseFloat(response.getDataTable().getValue(i, 1)))) {
+      var point = new google.maps.LatLng(
+        parseFloat(response.getDataTable().getValue(i, 0)),
+        parseFloat(response.getDataTable().getValue(i, 1)));
+      numResults++;
+      bounds.extend(point);
+    }
+  }
+// alert("bounds =" +bounds)
   // zoom to the bounds
-//	console.log("numResults", numResults);
+//  alert("numResults="+numResults)
   if (numResults > 1) {
-//  map.fitBounds(bounds);
+  map.fitBounds(bounds);
+  	layer.setOptions({
+    query: {
+         select: 'Prop_ID',
+      from: FT_TableID
+    },
+	options: {
+        styleId: 2,
+        templateId: 2
+      },
+	styles: [{
+	//'Parcel12' contains " + "'" + term + "'"
+      where: "'Parcel12' STARTS WITH " + "'" + globeterm + "'",
+      polygonOptions: {
+        strokeWeight: 6,
+//		strokeColor: '#0000FF',
+		strokeOpacity: 0.8		
+      }
+    }]
+	})
 	}
   else if (numResults == 1) {
-//	map.setCenter(point);
-//	map.fitBounds(bounds);
+	map.setCenter(point);
+	map.fitBounds(bounds);
 //	alert("zoom="+map.zoom)
-//	map.setZoom(map.zoom-2);
-
-}      
+	map.setZoom(map.zoom-2);
+	addruler();
+  }
 }
    
 function getAllUrlParams(url) {
