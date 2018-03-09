@@ -613,7 +613,7 @@ if (pSiteID == null  || pSiteID == 'undefined' ) {
 
 function changeQueryGf(term) {
 //	globeterm = term
-alert("inchangeQueryGf");
+
 	var ftqueryText = "SELECT 'Parcel12'  FROM " + FTGeof_TableID + " WHERE siteid = " + term ;
 	ftqueryText = encodeURIComponent(ftqueryText);
 	alert(ftqueryText);
@@ -626,8 +626,7 @@ ftquery.send(zoomToGf);
 }
 
 function zoomToGf(response) {
-console.log("response");
-	alert("response");
+
   if (!response) {
     alert('no response');
     return;
@@ -653,9 +652,8 @@ console.log("numrows", numRows);
       bounds.extend(point);
     }
   }
-alert("bounds =" +bounds)
+console.log("numResults", numResults);
   // zoom to the bounds
-alert("numResults="+numResults)
 	console.log("numResults", numResults);
   if (numResults > 1) {
   map.fitBounds(bounds);
