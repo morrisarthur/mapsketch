@@ -623,7 +623,7 @@ query.send(zoomToGf);
 
 }
 
-function zoomToGf(response) {
+function zoomTo(response) {
   if (!response) {
     alert('no response');
     return;
@@ -633,7 +633,6 @@ function zoomToGf(response) {
     return;
   }
   FTresponse = response;
-	console.log(response);
   //for more information on the response object, see the documentation
   //http://code.google.com/apis/visualization/documentation/reference.html#QueryResponse
   numRows = response.getDataTable().getNumberOfRows();
@@ -681,9 +680,39 @@ function zoomToGf(response) {
 //	alert("zoom="+map.zoom)
 	map.setZoom(map.zoom-2);
 	addruler();
-  }
-  else alert("no resultsppp");
+
+
+// Only highlight polygon if siteid not specified
+if (pSiteID == null  || pSiteID == 'undefined' ) {
+	layer.setOptions({
+    query: {
+         select: 'Prop_ID',
+      from: FT_TableID
+    },
+	options: {
+        styleId: 2,
+        templateId: 2,
+		Id: google.maps.MapTypeId.HYBRID,
+
+      },
+	styles: [{
+
+      where: "'Parcel12' STARTS WITH " + "'" + globeterm + "'",
+      polygonOptions: {
+        strokeWeight: 6,
+//		strokeColor: '#0000FF',
+		strokeOpacity: 0.8		
+      }
+    }]
+	})
 }
+	
+	}
+	
+  else alert("no results");
+
+}
+
    
 function getAllUrlParams(url) {
 
