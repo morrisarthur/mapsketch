@@ -614,14 +614,14 @@ if (pSiteID == null  || pSiteID == 'undefined' ) {
 function changeQueryGf(term) {
 //	globeterm = term
 alert("inchangeQueryGf");
-	var queryText = "SELECT Parcel12  FROM " + FTGeof_TableID + " WHERE siteid = " + term ;
+	var ftqueryText = "SELECT Parcel12  FROM " + FTGeof_TableID + " WHERE siteid = " + term ;
 	alert(queryText);
 // queryText = encodeURIComponent(queryText );
- var queryText = encodeURIComponent("SELECT 'Lat', 'Lon'  FROM " + FT_TableID + " WHERE 'Parcel12' STARTS WITH " + "'" + term + "'");
+ var ftqueryText = encodeURIComponent("SELECT 'Lat', 'Lon'  FROM " + FT_TableID + " WHERE 'Parcel12' STARTS WITH " + "'" + term + "'");
  
  
-var ftquery = new google.visualization.Query('https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
-alert(querytext);
+var ftquery = new google.visualization.Query('https://www.google.com/fusiontables/gvizdata?tq=' + ftqueryText);
+
 	alert(ftquery);
 ftquery.send(zoomToGf);
 
