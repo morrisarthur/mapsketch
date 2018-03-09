@@ -617,8 +617,9 @@ alert("inchangeQueryGf");
 	var queryText = "SELECT Parcel12  FROM " + FTGeof_TableID + " WHERE siteid = " + term ;
 	alert(queryText);
 // queryText = encodeURIComponent(queryText );
-	alert(queryText);
-
+ var queryText = encodeURIComponent("SELECT 'Lat', 'Lon'  FROM " + FT_TableID + " WHERE 'Parcel12' STARTS WITH " + "'" + term + "'");
+ 
+ 
 var ftquery = new google.visualization.Query('https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
 alert(querytext);
 	alert(ftquery);
