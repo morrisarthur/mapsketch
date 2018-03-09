@@ -644,6 +644,7 @@ console.log("numrows", numRows);
   var bounds = new google.maps.LatLngBounds();
   var numResults = 0;
   for (i = 0; i < numRows; i++) {
+	  alert("in loop");
     if (!isNaN(parseFloat(response.getDataTable().getValue(i, 0))) && !isNaN(parseFloat(response.getDataTable().getValue(i, 1)))) {
       var point = new google.maps.LatLng(
         parseFloat(response.getDataTable().getValue(i, 0)),
@@ -654,7 +655,7 @@ console.log("numrows", numRows);
   }
 alert("numResults", numResults);
   // zoom to the bounds
-	console.log("numResults", numResults);
+//	console.log("numResults", numResults);
   if (numResults > 1) {
 //  map.fitBounds(bounds);
 	}
