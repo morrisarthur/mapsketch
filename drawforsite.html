@@ -352,7 +352,7 @@ listenerAddFeature = map.data.addListener('addfeature', function(event) {
   } 	 
 
 if (pSiteID > 0) { 
-  changeQueryGf(pSiteID);
+  changeQueryGf(pP12);
   }
 else if (pP12 != null) {
   changeQuery(pP12);
@@ -682,30 +682,10 @@ function zoomToGf(response) {
 	addruler();
 
 
-// Only highlight polygon if siteid not specified
-if (pSiteID == null  || pSiteID == 'undefined' ) {
-	layer.setOptions({
-    query: {
-         select: 'Prop_ID',
-      from: FT_TableID
-    },
-	options: {
-        styleId: 2,
-        templateId: 2,
-		Id: google.maps.MapTypeId.HYBRID,
+	// Only highlight polygon if siteid not specified
+	if (pSiteID == null  || pSiteID == 'undefined' ) {
 
-      },
-	styles: [{
-
-      where: "'Parcel12' STARTS WITH " + "'" + globeterm + "'",
-      polygonOptions: {
-        strokeWeight: 6,
-//		strokeColor: '#0000FF',
-		strokeOpacity: 0.8		
-      }
-    }]
-	})
-}
+	}
 	
 	}
 	
