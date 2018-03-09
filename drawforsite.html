@@ -352,9 +352,9 @@ listenerAddFeature = map.data.addListener('addfeature', function(event) {
   } 	 
 
 if (pSiteID != null ) { 
-  qres = changeQueryGf(pP12)
+  qres = changeQueryGf(pSiteID)
   }
-else if (p12 != null) {
+else if (pP12 != null) {
   changeQuery(pP12);
 }
 
@@ -615,7 +615,7 @@ if (pSiteID == null  || pSiteID == 'undefined' ) {
 function changeQueryGf(term) {
 	globeterm = term
 
- var queryText = encodeURIComponent("SELECT 'Lat', 'Lon'  FROM " + FT_TableID + " WHERE 'Parcel12' STARTS WITH " + "'" + term + "'");
+ var queryText = encodeURIComponent("SELECT siteid  FROM " + FTGeof_TableID + " WHERE 'siteid' = " + term );
 
 var query = new google.visualization.Query('https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
 
@@ -656,8 +656,8 @@ function zoomToGf(response) {
   map.fitBounds(bounds);
   	layer.setOptions({
     query: {
-         select: 'Prop_ID',
-      from: FT_TableID
+         select: 'siteid',
+      from: FTGeof_TableID
     },
 	options: {
         styleId: 2,
@@ -665,7 +665,7 @@ function zoomToGf(response) {
       },
 	styles: [{
 	//'Parcel12' contains " + "'" + term + "'"
-      where: "'Parcel12' STARTS WITH " + "'" + globeterm + "'",
+      where: "'siteid' = " + globeterm ,
       polygonOptions: {
         strokeWeight: 6,
 //		strokeColor: '#0000FF',
@@ -677,7 +677,7 @@ function zoomToGf(response) {
   else if (numResults == 1) {
 	map.setCenter(point);
 	map.fitBounds(bounds);
-//	alert("zoom="+map.zoom)
+	alert("zoom="+map.zoom)
 	map.setZoom(map.zoom-2);
 
 }      
