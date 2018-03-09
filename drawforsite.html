@@ -615,7 +615,9 @@ if (pSiteID == null  || pSiteID == 'undefined' ) {
 function changeQueryGf(term) {
 //	globeterm = term
 alert("inchangeQueryGf");
- var queryText = encodeURIComponent("SELECT 'siteid'  FROM " + FTGeof_TableID + " WHERE 'siteid' = " + term );
+	var queryText = "SELECT siteid  FROM " + FTGeof_TableID + " WHERE siteid = " + term ;
+	alert(queryText);
+ queryText = encodeURIComponent(queryText );
 
 var query = new google.visualization.Query('https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
 alert(querytext);
