@@ -647,7 +647,7 @@ console.log("numrows", numRows);
   var numResults = 0;
 
       var point = new google.maps.LatLng(-122.31539905071259,48.730220971482154);
-      bounds.extend(point);
+//      bounds.extend(point);
 
 alert("numResults", numResults);
   // zoom to the bounds
@@ -656,10 +656,10 @@ alert("numResults", numResults);
 //  map.fitBounds(bounds);
 	}
   else if (numResults == 1) {
-	map.setCenter(point);
-	map.fitBounds(bounds);
-	alert("zoom="+map.zoom)
-	map.setZoom(map.zoom-2);
+//	map.setCenter(point);
+//	map.fitBounds(bounds);
+//	alert("zoom="+map.zoom)
+//	map.setZoom(map.zoom-2);
 
 }      
 }
