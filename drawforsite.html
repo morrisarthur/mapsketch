@@ -659,25 +659,6 @@ alert("numResults="+numResults)
 	console.log("numResults", numResults);
   if (numResults > 1) {
   map.fitBounds(bounds);
-  	layer.setOptions({
-    query: {
-         select: 'col2',
-      from: FTGeof_TableID
-    },
-	options: {
-        styleId: 2,
-        templateId: 2
-      },
-	styles: [{
-	//'Parcel12' contains " + "'" + term + "'"
-      where: "'siteid' = " + term ,
-      polygonOptions: {
-        strokeWeight: 6,
-//		strokeColor: '#0000FF',
-		strokeOpacity: 0.8		
-      }
-    }]
-	})
 	}
   else if (numResults == 1) {
 	map.setCenter(point);
