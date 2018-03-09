@@ -616,19 +616,16 @@ function changeQueryGf(term) {
 alert("inchangeQueryGf");
 	var ftqueryText = "SELECT Parcel12  FROM " + FTGeof_TableID + " WHERE siteid = " + term ;
 	alert(ftqueryText);
-// queryText = encodeURIComponent(queryText );
- var ftqueryText = encodeURIComponent("SELECT 'Lat', 'Lon'  FROM " + FT_TableID + " WHERE 'Parcel12' STARTS WITH " + "'" + term + "'");
- 
+
  
 var ftquery = new google.visualization.Query('https://www.google.com/fusiontables/gvizdata?tq=' + ftqueryText);
 
-	alert(ftquery);
 ftquery.send(zoomToGf);
 
 }
 
 function zoomToGf(response) {
-	alert(response);
+console.log(response);
   if (!response) {
     alert('no response');
     return;
