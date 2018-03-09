@@ -619,7 +619,7 @@ function changeQueryGf(term) {
 //alert(queryText)
 var query = new google.visualization.Query('https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
 
-query.send(zoomTo);
+query.send(zoomToGf);
 
 }
 
@@ -681,6 +681,7 @@ function zoomToGf(response) {
 	map.setZoom(map.zoom-2);
 	addruler();
   }
+  else alert("no resultsppp");
 }
    
 function getAllUrlParams(url) {
