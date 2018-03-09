@@ -653,15 +653,15 @@ console.log("numrows", numRows);
       bounds.extend(point);
     }
   }
-// alert("bounds =" +bounds)
+alert("bounds =" +bounds)
   // zoom to the bounds
-//  alert("numResults="+numResults)
+alert("numResults="+numResults)
 	console.log("numResults", numResults);
   if (numResults > 1) {
   map.fitBounds(bounds);
   	layer.setOptions({
     query: {
-         select: 'siteid',
+         select: 'col2',
       from: FTGeof_TableID
     },
 	options: {
@@ -670,7 +670,7 @@ console.log("numrows", numRows);
       },
 	styles: [{
 	//'Parcel12' contains " + "'" + term + "'"
-      where: "'siteid' = " + globeterm ,
+      where: "'siteid' = " + term ,
       polygonOptions: {
         strokeWeight: 6,
 //		strokeColor: '#0000FF',
