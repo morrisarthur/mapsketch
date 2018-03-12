@@ -1006,7 +1006,8 @@ function httpGet(theUrl)
 			 query: {
 			   select: 'KmlString',
 			   from: '1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q',
-			   where:  "Deleted = ''"
+//			   where:  "Deleted = ''"
+			   where:  "Deleted <> 'Y'"				
 			 },
 			 map: _map
 			});
