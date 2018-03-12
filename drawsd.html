@@ -983,7 +983,8 @@ function httpGet(theUrl)
         .then(function(response) {
                 // Handle the results here (response.result has the parsed body).
                 console.log("Response", response.status);
-	    	if (confirm("New component added. Reload?")) {
+	    	alert("New component added. Reload on OK")) 
+			map.data.remove(pevent.feature);
 			geoFlayer.setOptions({
 			 query: {
 			   select: 'KmlString',
@@ -995,7 +996,7 @@ function httpGet(theUrl)
 			});
 
 				  
-		} 
+		
               },
               function(err) { 
 			alert("Oooops: " + err.result.error.message);
