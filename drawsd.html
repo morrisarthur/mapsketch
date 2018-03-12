@@ -982,7 +982,16 @@ function httpGet(theUrl)
     })
         .then(function(response) {
                 // Handle the results here (response.result has the parsed body).
-                console.log("Response", response.statusText);
+                console.log("Response", response.getDataTable().getNumberOfRows());
+	    	geoFlayer.setOptions({
+		 query: {
+		   select: 'KmlString',
+		   from: '1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q',
+		   where:  "Deleted does not contain 'Y'"				
+		 },
+		 map: map
+		});
+
               },
               function(err) { 
 			alert("Oooops: " + err.result.error.message);
@@ -1007,13 +1016,11 @@ function httpGet(theUrl)
 			   select: 'KmlString',
 			   from: '1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q',
 //			   where:  "Deleted = ''"
-			   where:  "Deleted <> 'Y'"				
+			   where:  "Deleted does not contain 'Y'"				
 			 },
 			 map: map
 			});
-//			geoFlayer.setMap(null);
-//			geoFlayer.setMap(map);
-			console.log("map not reset from delete");
+
 				  
 		} 
 
