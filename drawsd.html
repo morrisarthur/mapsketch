@@ -982,7 +982,7 @@ function httpGet(theUrl)
     })
         .then(function(response) {
                 // Handle the results here (response.result has the parsed body).
-                console.log("Response", response.getDataTable().getNumberOfRows());
+                console.log("Response", response);
 	    	geoFlayer.setOptions({
 		 query: {
 		   select: 'KmlString',
