@@ -1002,6 +1002,14 @@ function httpGet(theUrl)
         .then(function(response) {
                 // Handle the results here (response.result has the parsed body).
                	if (confirm("Delete confirmed. Reload?")) {
+			geoFlayer.setOptions({
+			 query: {
+			   select: 'KmlString',
+			   from: '1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q',
+			   where:  "Deleted = ''"
+			 },
+			 map: _map
+			});
 			geoFlayer.setMap(null);
 			geoFlayer.setMap(map);
 				  
