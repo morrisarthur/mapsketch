@@ -982,16 +982,20 @@ function httpGet(theUrl)
     })
         .then(function(response) {
                 // Handle the results here (response.result has the parsed body).
-                console.log("Response", response);
-	    	geoFlayer.setOptions({
-		 query: {
-		   select: 'KmlString',
-		   from: '1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q',
-		   where:  "Deleted does not contain 'Y'"				
-		 },
-		 map: map
-		});
+                console.log("Response", response.status);
+	    	if (confirm("New component added. Reload?")) {
+			geoFlayer.setOptions({
+			 query: {
+			   select: 'KmlString',
+			   from: '1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q',
+//			   where:  "Deleted = ''"
+			   where:  "Deleted does not contain 'Y' AND KmlString does not contain "'+new Date().getTime()+'"';				
+			 },
+			 map: map
+			});
 
+				  
+		} 
               },
               function(err) { 
 			alert("Oooops: " + err.result.error.message);
@@ -1016,7 +1020,7 @@ function httpGet(theUrl)
 			   select: 'KmlString',
 			   from: '1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q',
 //			   where:  "Deleted = ''"
-			   where:  "Deleted does not contain 'Y'"				
+			   where:  "Deleted does not contain 'Y' AND KmlString does not contain "'+new Date().getTime()+'"';				
 			 },
 			 map: map
 			});
