@@ -982,8 +982,9 @@ function httpGet(theUrl)
     })
         .then(function(response) {
                 // Handle the results here (response.result has the parsed body).
-                console.log("Response", response.status);
-	    	alert("New component added. Reload on OK"),
+                if (response.status = 200) {
+
+	    	alert("New component added. Reload on OK."),
 			map.data.remove(pevent.feature);
 			geoFlayer.setOptions({
 			 query: {
@@ -994,6 +995,10 @@ function httpGet(theUrl)
 			 },
 			 map: map
 			});
+		}
+	    	else {
+			alert(response.statusText);
+		}
 
 				  
 		
@@ -1015,7 +1020,7 @@ function httpGet(theUrl)
     })
         .then(function(response) {
                 // Handle the results here (response.result has the parsed body).
-	    	console.log('response', response);
+//	    	console.log('response', response);
 	    	if (response.status = 200) {
                	alert("Delete confirmed. Reloading...") 
 			geoFlayer.setOptions({
@@ -1028,7 +1033,7 @@ function httpGet(theUrl)
 			});
 		}
 	    	else {
-			alert(response.statusMessage)
+			alert(response.statusText)
 		}
 
               },
