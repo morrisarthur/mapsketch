@@ -1009,27 +1009,28 @@ function httpGet(theUrl)
 //    deletesql = "Delete From 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q Where siteid = "+ esiteid + " AND DoneBy = '" + edoneby + "' AND DoneOn = '" + edoneon + "'";;
      deletesql = "UPDATE 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q SET Deleted = 'Y' WHERE siteid = "+ esiteid + " AND DoneBy = '" + edoneby + "' AND DoneOn = '" + edoneon + "'";;
 
-	  console.log('sqlsent: ' + deletesql)   
+//	  console.log('sqlsent: ' + deletesql)   
     return gapi.client.fusiontables.query.sql({
       "sql": deletesql
     })
         .then(function(response) {
                 // Handle the results here (response.result has the parsed body).
-               	if (confirm("Delete confirmed. Reload?")) {
+	    	console.log('response', response);
+	    	if (response.status = 200) {
+               	alert("Delete confirmed. Reloading...") 
 			geoFlayer.setOptions({
 			 query: {
 			   select: 'KmlString',
 			   from: '1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q',
-//			   where:  "Deleted = ''"
 			   where:  "Deleted does not contain 'Y' AND KmlString does not contain '"+new Date().getTime()+"'"				
 			 },
 			 map: map
 			});
+		}
+	    	else {
+			alert(response.statusMessage)
+		}
 
-				  
-		} 
-
-	    	console.log(response.result);
               },
               function(err) { 
 			alert("Error: " + err.result.error.message);
