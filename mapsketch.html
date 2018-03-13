@@ -527,7 +527,7 @@ if (numResults == 1) {
 	var kmlString = response.getDataTable().getValue(0, 0);
 	var lonlat = kmlString.replace("<Point><coordinates>","").replace("</Point>","");
 	lonlati = lonlat.split(',');
-	console.log(lonlati[1] + '   ' + lonlati[0]);
+//	console.log(lonlati[1] + '   ' + lonlati[0]);
 	  var point = new google.maps.LatLng(lonlati[1],lonlati[0]);
  
 	  var bounds = new google.maps.LatLngBounds();
