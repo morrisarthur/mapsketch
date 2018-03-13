@@ -71,7 +71,6 @@ google.load('visualization', '1', {
 });
 
 var globeterm = "";
-var gfterm = 0;
 var globevertices = [];
 var polyCaption = [];
 var markerCaption = [];
@@ -120,6 +119,7 @@ map = new google.maps.Map(document.getElementById('map_canvas'), {
 
 ///Default to top-down view
 map.setTilt(0);
+
 
 // Get URL parameter
 pP12 = getAllUrlParams().p;
@@ -254,7 +254,7 @@ listenerAddFeature = map.data.addListener('addfeature', function(event) {
 		$("#myModal").modal({show: true, backdrop: "static"});
 	}
 	else {
-		$('#gtag').empty().append('<option value="Transport Pipe">Transport Pipe</option>');
+		$('#gtag').empty().append('<option value="OSS Connection">OSS Connection</option>');
 		document.getElementById('modtitle').innerHTML = "SiteID: " + pSiteID;
 		$("#myModal").modal({show: true, backdrop: "static"});
 		
@@ -351,14 +351,9 @@ listenerAddFeature = map.data.addListener('addfeature', function(event) {
     return dist; 
   } 	 
 
-if (pSiteID > 0) { 
-  changeQueryGf(pSiteID);
-  }
-else if (pP12 != null) {
-  changeQuery(pP12);
-}
 
-else { ///Called without P12 parameter
+
+if (pP12 == null  || pP12 == 'undefined' ) { ///Called without P12 parameter
 	// Try HTML5 geolocation.
 	 ////Zoom to current location (Still initiale-ing)
 	var infoWindow = new google.maps.InfoWindow;
@@ -381,6 +376,11 @@ else { ///Called without P12 parameter
 	  alert("false")
 	  handleLocationError(false, infoWindow, map.getCenter());
 	}
+}
+else {   ///Zoom to parcel indicated by pP12
+//	alert(pP12);
+	changeQuery(pP12);
+
 }
 
 
@@ -612,63 +612,7 @@ if (pSiteID == null  || pSiteID == 'undefined' ) {
 
 }
 
-function changeQueryGf(term) {
- var queryText = encodeURIComponent("SELECT 'KmlString'  FROM " + FTGeof_TableID + " WHERE 'siteid' = " + term );
- 
- 
-//alert(queryText)
-var query = new google.visualization.Query('https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
-
-query.send(zoomToGf);
-
-}
-
-function zoomToGf(response) {
-  if (!response) {
-    alert('no response');
-    return;
-  }
-  if (response.isError()) {
-    alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
-    return;
-  }
-  FTresponse = response;
-  //for more information on the response object, see the documentation
-  //http://code.google.com/apis/visualization/documentation/reference.html#QueryResponse
-  numRows = response.getDataTable().getNumberOfRows();
-  numCols = response.getDataTable().getNumberOfColumns();
-
-  var bounds = new google.maps.LatLngBounds();
-
-      var point = new google.maps.LatLng(-122.31539905071259,48.730220971482154);
- 
-      bounds.extend(point);
-
-
-// alert("bounds =" +bounds)
-  // zoom to the bounds
-//  alert("numResults="+numResults)
-
-if (numResults == 1) {
-	map.setCenter(point);
-	map.fitBounds(bounds);
-//	alert("zoom="+map.zoom)
-	map.setZoom(map.zoom-2);
-	addruler();
-
-
-	// Only highlight polygon if siteid not specified
-	if (pSiteID == null  || pSiteID == 'undefined' ) {
-
-	}
-	
-	}
-	
-  else alert("no results");
-	map.setCenter(point);
-	map.fitBounds(bounds);
-
-}
+      
 
    
 function getAllUrlParams(url) {
@@ -1038,7 +982,26 @@ function httpGet(theUrl)
     })
         .then(function(response) {
                 // Handle the results here (response.result has the parsed body).
-                console.log("Response", response.statusText);
+                if (response.status = 200) {
+
+	    	alert("New component added. Reload on OK."),
+			map.data.remove(pevent.feature);
+			geoFlayer.setOptions({
+			 query: {
+			   select: 'KmlString',
+			   from: '1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q',
+//			   where:  "Deleted = ''"
+			   where:  "Deleted does not contain 'Y' AND KmlString does not contain '"+new Date().getTime()+"'"				
+			 },
+			 map: map
+			});
+		}
+	    	else {
+			alert(response.statusText);
+		}
+
+				  
+		
               },
               function(err) { 
 			alert("Oooops: " + err.result.error.message);
@@ -1051,19 +1014,28 @@ function httpGet(theUrl)
 //    deletesql = "Delete From 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q Where siteid = "+ esiteid + " AND DoneBy = '" + edoneby + "' AND DoneOn = '" + edoneon + "'";;
      deletesql = "UPDATE 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q SET Deleted = 'Y' WHERE siteid = "+ esiteid + " AND DoneBy = '" + edoneby + "' AND DoneOn = '" + edoneon + "'";;
 
-	  console.log('sqlsent: ' + deletesql)   
+//	  console.log('sqlsent: ' + deletesql)   
     return gapi.client.fusiontables.query.sql({
       "sql": deletesql
     })
         .then(function(response) {
                 // Handle the results here (response.result has the parsed body).
-               	if (confirm("Delete confirmed. Reload?")) {
-			geoFlayer.setMap(null);
-			geoFlayer.setMap(map);
-				  
-		} 
+//	    	console.log('response', response);
+	    	if (response.status = 200) {
+               	alert("Delete confirmed. Reloading...") 
+			geoFlayer.setOptions({
+			 query: {
+			   select: 'KmlString',
+			   from: '1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q',
+			   where:  "Deleted does not contain 'Y' AND KmlString does not contain '"+new Date().getTime()+"'"				
+			 },
+			 map: map
+			});
+		}
+	    	else {
+			alert(response.statusText)
+		}
 
-	    	console.log(response.result);
               },
               function(err) { 
 			alert("Error: " + err.result.error.message);
