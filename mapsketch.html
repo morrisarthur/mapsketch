@@ -91,6 +91,7 @@ var pevent;
 var pfeature;
 var pSiteID;
 var pP12;
+var pSiteDesc;
 var listenerAddFeature;
 var myLatLng = new google.maps.LatLng(0.0, 0.0);
 var blTrackLoc;
@@ -125,6 +126,7 @@ map.setTilt(0);
 // Get URL parameter
 pP12 = getAllUrlParams().p;
 pSiteID = getAllUrlParams().s;
+pSiteDesc = getAllUrlParams().d;
 if (pSiteID > 0) {
 	gapi.load("client:auth2", {
 	    callback: function() {
@@ -298,7 +300,7 @@ $(document).on("click", "#close_btn", function(event){
 		kmlstring =  kmlstring.replace(/\[/g, "");
 		kmlstring = kmlprefix + kmlstring + kmlsuffix;
 	})
-	execute(kmlstring, pSiteID,document.getElementById('gtag').value,document.getElementById('gdetails').value,pevent.feature.getGeometry().getType());
+	execute(kmlstring, pSiteID,document.getElementById('gtag').value,document.getElementById('gdetails').value,pevent.feature.getGeometry().getType(),pSiteDesc);
 
    
 	
@@ -1027,14 +1029,15 @@ function httpGet(theUrl)
     	},
               function(err) { console.error("Error loading GAPI client for API", err); });
   }
+	
   // Make sure the client is loaded and sign-in is complete before calling this method.
-  function execute(fkml,fpsiteid,ffName,ffDescription,ffType) {
+  function execute(fkml,fpsiteid,ffName,ffDescription,ffType,fSiteDesc) {
 	  var doneOn = new Date();
 	  var pIcon = ffName.substring(0,1).toLowerCase();
 	  if (pIcon == "w") {
 		  pIcon = "w_blue"
 	  }
-    insertsql = "Insert Into 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q (fFillColor, fBorderColor, Icon, DoneBy, DoneOn, KmlString,siteid,fName,fDescription,fType) VALUES ('#ff000020','#ff000060','" + pIcon + "','" + googleUserEmail + "','" + doneOn.toLocaleString("en-US") + "','" + fkml + "'," + fpsiteid + ", '" + ffName  + "', '" + ffDescription + "', '" + ffType + "')";
+    insertsql = "Insert Into 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q (fFillColor, fBorderColor, Icon, DoneBy, DoneOn, KmlString,siteid,fName,fDescription,fType,SiteDesc) VALUES ('#ff000020','#ff000060','" + pIcon + "','" + googleUserEmail + "','" + doneOn.toLocaleString("en-US") + "','" + fkml + "'," + fpsiteid + ", '" + ffName  + "', '" + ffDescription + "', '" + ffType + "', '" + fSiteDesc + "')";
 //    console.log('sqlsent: ' + insertsql)   
     return gapi.client.fusiontables.query.sql({
       "sql": insertsql
@@ -1069,9 +1072,10 @@ function httpGet(theUrl)
   }
 	
   function executedelete(esiteid,edoneby,edoneon) {
+	  var doneOn = new Date();
 
 //    deletesql = "Delete From 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q Where siteid = "+ esiteid + " AND DoneBy = '" + edoneby + "' AND DoneOn = '" + edoneon + "'";;
-     deletesql = "UPDATE 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q SET Deleted = 'Y' WHERE siteid = "+ esiteid + " AND DoneBy = '" + edoneby + "' AND DoneOn = '" + edoneon + "'";;
+     deletesql = "UPDATE 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q SET Deleted = 'Y',  DoneBy = '" + googleUserEmail + "', DoneOn = '" + doneOn.toLocaleString("en-US") + " ' WHERE siteid = "+ esiteid + " AND DoneBy = '" + edoneby + "' AND DoneOn = '" + edoneon + "'";;
 
 //	  console.log('sqlsent: ' + deletesql)   
     return gapi.client.fusiontables.query.sql({
