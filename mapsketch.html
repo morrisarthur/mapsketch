@@ -97,6 +97,7 @@ var blTrackLoc;
 var im = 'https://www.robotwoods.com/dev/misc/bluecircle.png';	
 var googleUserEmail;
 var clientLoaded;
+var sCompType;
 
 
 google.maps.event.addDomListener(window, 'load', initialize);
@@ -147,7 +148,100 @@ if (pSiteID > 0) {
 	    }
 
 	  })
+
 }
+
+	
+// Set default parcel layer from Fusion Tables  
+  layer = new google.maps.FusionTablesLayer({
+	map: map,
+//	suppressInfoWindows: true,
+    query: {
+      //Previous select: 'latitude', /* was 'Latitude,Longitude', used to work... */
+      select: 'col2',
+      from: FT_TableID,
+       where: ""
+    },
+	options: {
+        styleId: 2,
+        templateId: 2
+      }
+
+});
+
+
+
+	
+// Set geoFeatures layer from Fusion Tables
+var ftinfoWindow = new google.maps.InfoWindow();
+  geoFlayer = new google.maps.FusionTablesLayer({
+	  map: map,
+    query: {
+      //Previous select: 'latitude', was 'Latitude,Longitude', used to work...
+      select: 'col2',
+      from: FTGeof_TableID,
+      where: "Deleted = ''"
+
+    },
+	options: {
+        styleId: 2,
+        templateId: 2,
+	suppressInfoWindows: true
+}
+});
+google.maps.event.addListener(geoFlayer, 'click', function(e) {
+
+	
+ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="button" value="Delete" id="go"  > </div>');
+  ftinfoWindow.setPosition(e.latLng);
+  ftinfoWindow.open(map);
+
+  google.maps.event.addDomListener(document.getElementById('go'),
+      'click', function() {
+//	console.log(e.infoWindowHtml);
+	var pos;
+	var endpos;
+	var targ;
+	  var hstr;
+	  hstr = e.infoWindowHtml;
+	targ = "<b>DoneBy:</b>";
+	pos = hstr.indexOf(targ) + targ.length;
+	endpos = hstr.indexOf("<", pos);
+	var hdoneby = hstr.substring(pos,endpos).trim();
+
+	targ = "<b>siteid:</b>";
+	pos = hstr.indexOf(targ) + targ.length;
+	endpos = hstr.indexOf("<", pos);
+	var hsiteid = hstr.substring(pos,endpos).trim();
+	  
+	 targ = "<b>DoneOn:</b>";
+	pos = hstr.indexOf(targ) + targ.length;
+	endpos = hstr.indexOf("<", pos);
+	pos = hstr.indexOf(targ) + targ.length;
+	endpos = hstr.indexOf("<", pos);
+	var hdoneon = hstr.substring(pos,endpos).trim();
+	  ftinfoWindow.close();
+	  if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
+		  console.log("IsSignedIn !");
+		  if (clientLoaded) {
+			  executedelete(hsiteid, hdoneby,hdoneon);
+		 }
+		  else {
+			  alert("Not yet ready..try again");
+			  loadClient();
+		  }
+	  }
+	  else {
+		  alert("Not yet ready..try again after login");
+		  authenticate().then(loadClient);
+	  }
+	  
+	});
+  });
+
+	
+	
+	
 
 map.data.setStyle();
 map.data.setControls(['Point', 'LineString', 'Polygon']);
@@ -384,104 +478,10 @@ else {   ///Zoom to parcel indicated by pP12
 }
 
 
-	
-// Set default parcel layer from Fusion Tables  
-  layer = new google.maps.FusionTablesLayer({
-	map: map,
-//	suppressInfoWindows: true,
-    query: {
-      //Previous select: 'latitude', /* was 'Latitude,Longitude', used to work... */
-      select: 'col2',
-      from: FT_TableID,
-       where: ""
-    },
-	options: {
-        styleId: 2,
-        templateId: 2
-      }
-
-});
-
-
-// Set geoFeatures layer from Fusion Tables
-var ftinfoWindow = new google.maps.InfoWindow();
-  geoFlayer = new google.maps.FusionTablesLayer({
-	  map: map,
-    query: {
-      //Previous select: 'latitude', was 'Latitude,Longitude', used to work...
-      select: 'col2',
-      from: FTGeof_TableID,
-      where: "Deleted = ''"
-
-    },
-	options: {
-        styleId: 2,
-        templateId: 2,
-	suppressInfoWindows: true
-}
-});
-google.maps.event.addListener(geoFlayer, 'click', function(e) {
-
-	
-ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="button" value="Delete" id="go"  > </div>');
-  ftinfoWindow.setPosition(e.latLng);
-  ftinfoWindow.open(map);
-
-  google.maps.event.addDomListener(document.getElementById('go'),
-      'click', function() {
-//	console.log(e.infoWindowHtml);
-	var pos;
-	var endpos;
-	var targ;
-	  var hstr;
-	  hstr = e.infoWindowHtml;
-	targ = "<b>DoneBy:</b>";
-	pos = hstr.indexOf(targ) + targ.length;
-	endpos = hstr.indexOf("<", pos);
-	var hdoneby = hstr.substring(pos,endpos).trim();
-
-	targ = "<b>siteid:</b>";
-	pos = hstr.indexOf(targ) + targ.length;
-	endpos = hstr.indexOf("<", pos);
-	var hsiteid = hstr.substring(pos,endpos).trim();
-	  
-	 targ = "<b>DoneOn:</b>";
-	pos = hstr.indexOf(targ) + targ.length;
-	endpos = hstr.indexOf("<", pos);
-	pos = hstr.indexOf(targ) + targ.length;
-	endpos = hstr.indexOf("<", pos);
-	var hdoneon = hstr.substring(pos,endpos).trim();
-	  ftinfoWindow.close();
-	  if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
-		  console.log("IsSignedIn !");
-		  if (clientLoaded) {
-			  executedelete(hsiteid, hdoneby,hdoneon);
-		 }
-		  else {
-			  alert("Not yet ready..try again");
-			  loadClient();
-		  }
-	  }
-	  else {
-		  alert("Not yet ready..try again after login");
-		  authenticate().then(loadClient);
-	  }
-	  
-	});
-  });
 
 function displayInfo(disp){
   alert(disp);
 }
-
-  //SET MAP    
-//layer.setMap(null);
-//layer.setMap(map);
-
-
-  //SET MAP    
-//geoFlayer.setMap(map);
-
 
 
 // Create the DIV to hold the control and call the CenterControl()
