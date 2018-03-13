@@ -471,16 +471,12 @@ if (pP12 == null  || pP12 == 'undefined' ) { ///Called without P12 parameter
 	  handleLocationError(false, infoWindow, map.getCenter());
 	}
 }
-else {   ///Zoom to parcel indicated by pP12
-//	alert(pP12);
-	changeQuery(pP12);
-
+else if (pSiteID > 0)  {   ///Zoom to parcel indicated by pP12
+	sCompType = 'Septic Tank';
+	gotoSite(sCompType);
 }
-
-
-
-function displayInfo(disp){
-  alert(disp);
+else {
+	changeQuery(pP12)
 }
 
 
@@ -500,7 +496,70 @@ map.controls[google.maps.ControlPosition.TOP_LEFT].push(centerControlDiv);
 
 }  ///this is end of initialize
 //***************************************************************************************************
+function gotoSite(compType) {
+	
+var cT;
+if (compType == ''){
+	cT = ''
+	}
+else {
+	cT = " AND fName = '" + compType + "' ";
+}
+ var queryText = "SELECT  KmlString  FROM " + FTGeof_TableID + " WHERE siteid = " + pSiteID + " AND Deleted = '' AND fType = 'Point' " + cT + " LIMIT 1";
+// console.log("queryText", queryText);
+var queryText = encodeURIComponent(queryText);
+var query = new google.visualization.Query('https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
+query.send(zoomTo);
+}
 
+function zoomTo(response) {
+  if (!response) {
+    alert('no response');
+    return;
+  }
+  if (response.isError()) {
+    alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+    return;
+  }
+ FTresponse = response;
+var numResults = response.getDataTable().getNumberOfRows();
+if (numResults == 1) {
+	var kmlString = response.getDataTable().getValue(0, 0);
+	var lonlat = kmlString.replace("<Point><coordinates>","").replace("</Point>","");
+	lonlati = lonlat.split(',');
+	console.log(lonlati[1] + '   ' + lonlati[0]);
+	  var point = new google.maps.LatLng(lonlati[1],lonlati[0]);
+ 
+	  var bounds = new google.maps.LatLngBounds();
+		  bounds.extend(point);
+		  map.setCenter(point);
+		map.fitBounds(bounds);
+	//	alert("zoom="+map.zoom)
+		map.setZoom(19);
+		var marker = new google.maps.Marker({
+		  position: point,
+			icon: {
+				path: google.maps.SymbolPath.CIRCLE,
+				scale: 8,
+				strokeColor: '#ffff00',
+				strokeWeight: 3
+			  },
+		  map: map,
+		  title: 'Target Site ' + pSiteID
+		});
+}
+else if (sCompType != ''){
+	sCompType = '';
+	gotoSite(sCompType);
+	}
+else {
+	alert("search on parcel");
+	changeQuery(pP12);
+	}
+	
+}
+
+	
 function changeQuery(term) {
 	globeterm = term
 	
