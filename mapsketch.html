@@ -509,10 +509,10 @@ else {
 // console.log("queryText", queryText);
 var queryText = encodeURIComponent(queryText);
 var query = new google.visualization.Query('https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
-query.send(zoomTo);
+query.send(zoomToSite);
 }
 
-function zoomTo(response) {
+function zoomToSite(response) {
   if (!response) {
     alert('no response');
     return;
