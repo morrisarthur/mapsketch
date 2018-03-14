@@ -227,7 +227,7 @@ ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="b
 	var hdoneon = hstr.substring(pos,endpos).trim();
 	  ftinfoWindow.close();
 	  if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
-		  console.log("IsSignedIn !");
+//		  console.log("IsSignedIn !");
 		  if (clientLoaded) {
 			  executedelete(hsiteid, hdoneby,hdoneon);
 		 }
@@ -1034,7 +1034,7 @@ function httpGet(theUrl)
 //    deletesql = "Delete From 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q Where siteid = "+ esiteid + " AND DoneBy = '" + edoneby + "' AND DoneOn = '" + edoneon + "'";;
      deletesql = "UPDATE 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q SET Deleted = 'Y',  DoneBy = '" + googleUserEmail + "', DoneOn = '" + doneOn.toLocaleString("en-US") + "' WHERE siteid = " + esiteid + " AND DoneBy = '" + edoneby + "' AND DoneOn = '" + edoneon + "'";;
 
-	  console.log('sqlsent: ' + deletesql)   
+//	  console.log('sqlsent: ' + deletesql)   
     return gapi.client.fusiontables.query.sql({
       "sql": deletesql
     })
