@@ -575,10 +575,10 @@ function changeQuery(term) {
   // zoom and center map on query results
   //set the query using the parameter
  // var queryText = encodeURIComponent("SELECT 'latitude', 'longitude' FROM " + FT_TableID + " WHERE 'Continent' contains " + "'" + term + "'");
-
  var queryText = encodeURIComponent("SELECT 'Lat', 'Lon'  FROM " + FT_TableID + " WHERE 'Parcel12' STARTS WITH " + "'" + term + "'");
- 
- 
+ console.log(queryText);
+	queryText = encodeURIComponent(queryText);
+
 //alert(queryText)
 var query = new google.visualization.Query('https://www.google.com/fusiontables/gvizdata?tq=' + queryText);
 
