@@ -131,7 +131,8 @@ pSiteDesc = decodeURI(getAllUrlParams().d);
 //alert(pSiteID);
 //alert(pSiteDesc);
 if (pSiteID > 0) {
-	gapi.load("client:auth2", {
+	
+		gapi.load("client:auth2", {
 	    callback: function() {
 	      var  clientid = '13872833309-o9hbt87a1ecdhniq8hmtblpllv34bsib.apps.googleusercontent.com'
 	      var auth2 = gapi.auth2.init({client_id: clientid, ux_mode: "popup"});
@@ -154,6 +155,24 @@ if (pSiteID > 0) {
 
 	  })
 
+	
+
+	  if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
+		  console.log("IsSignedIn !");
+		  if (clientLoaded) {
+			  executedelete(hsiteid, hdoneby,hdoneon);
+		 }
+		  else {
+			  console.log("doing loadClient");
+			  loadClient();
+		  }
+	}
+	else {
+		console.log("doing auth.loadClient");	
+	  authenticate().then(loadClient);
+	}
+	
+	
 }
 
 	
