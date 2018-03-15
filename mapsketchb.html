@@ -249,7 +249,7 @@ ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="b
 		  }
 	  }
 	  else {
-		  alert("Not yet ready..try again after login");
+		  alert("Not yet ready..try again after Signin");
 		  authenticate().then(loadClient);
 	  }
 	  
@@ -1003,15 +1003,21 @@ function httpGet(theUrl)
 			});
 		}
 	    	else {
-			alert(response.statusText);
+			alert("Odd insert response", response.statusText);
 		}
 
 				  
 		
               },
               function(err) { 
-			alert("Oooops: " + err.result.error.message);
-			console.error("Execute error", err); 
+			if (err.status = 403) {
+				alert("Insert error: " + err.result.error.message + ". Google user <" + googleUserEmail + "> not authorized(?) Contact WCHD.");
+			}
+			else {
+				alert("Insert error: " + err.result.error.message);
+			}
+		    
+			console.error("Access error", err); 
 		});
   }
 	
@@ -1046,10 +1052,10 @@ function httpGet(theUrl)
               },
               function(err) { 
 			if (err.status = 403) {
-				alert("Access error: " + err.result.error.message + " Google user " + googleUserEmail + " not authorized(?) Contact WCHD");
+				alert("Delete error: " + err.result.error.message + ". Google user <" + googleUserEmail + "> not authorized(?) Contact WCHD.");
 			}
 			else {
-				alert("Access error: " + err.result.error.message);
+				alert("Delete error: " + err.result.error.message);
 			}
 		    
 			console.error("Access error", err); 
