@@ -99,6 +99,7 @@ var im = 'https://www.robotwoods.com/dev/misc/bluecircle.png';
 var googleUserEmail;
 var clientLoaded;
 var sCompType;
+var  ossAppClientid = '13872833309-o9hbt87a1ecdhniq8hmtblpllv34bsib.apps.googleusercontent.com';
 
 
 google.maps.event.addDomListener(window, 'load', initialize);
@@ -875,6 +876,8 @@ controlTextr.innerHTML = 'Signin';
 controlUIr.appendChild(controlTextr);
 
 controlUIr.addEventListener('click', function() {
+	var url = "https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=" + ossAppClientid + "&scope=profile+email&prompt=select_account"
+	window.location.replace("http://stackoverflow.com");
 authenticate().then(loadClient);
 })
 }
