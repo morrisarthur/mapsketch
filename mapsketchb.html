@@ -1045,8 +1045,14 @@ function httpGet(theUrl)
 
               },
               function(err) { 
-			alert("Error: " + err.result.error.message);
-			console.error("Execute error", err); 
+			if (err.status = 403) {
+				alert("Access error: " + err.result.error.message + " Google user " + googleUserEmail + " not authorized(?) Contact WCHD");
+			}
+			else {
+				alert("Access error: " + err.result.error.message
+			}
+		    
+			console.error("Access error", err); 
 		});
   }
 	
