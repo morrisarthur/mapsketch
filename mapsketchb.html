@@ -876,7 +876,7 @@ controlTextr.innerHTML = 'Signin';
 controlUIr.appendChild(controlTextr);
 
 controlUIr.addEventListener('click', function() {
-	var url = "https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=" + ossAppClientid + "&scope=profile+email&prompt=select_account"
+	var url = "https://accounts.google.com/o/oauth2/auth?response_type=code&redirect_uri=https://cdn.rawgit.com/morrisarthur/mapsketch/45588d8/mapsketchb.html?s=177211&p=380330171403&d=Test%20site%3A%20Morris&client_id=" + ossAppClientid + "&scope=profile+email&prompt=select_account"
 	window.location.replace(url);
 //authenticate().then(loadClient);
 })
