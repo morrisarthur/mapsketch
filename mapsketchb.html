@@ -142,6 +142,7 @@ if (pSiteID > 0) {
 		  var currentUser = auth2.currentUser.get();
 		  var profile = auth2.currentUser.get().getBasicProfile();
 		  googleUserEmail = profile.getEmail();
+		
 
 		})
 	    },
@@ -155,7 +156,7 @@ if (pSiteID > 0) {
 
 	  })   //Endo gapi.load
 
-  authenticate().then(loadClient);
+
 }
 	
 	
