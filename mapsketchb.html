@@ -132,18 +132,18 @@ pSiteDesc = decodeURI(getAllUrlParams().d);
 //alert(pSiteDesc);
 if (pSiteID > 0) {
 	
-		gapi.load("client:auth2", {
+	gapi.load("client:auth2", {
 	    callback: function() {
-	      var  clientid = '13872833309-o9hbt87a1ecdhniq8hmtblpllv34bsib.apps.googleusercontent.com'
-	      var auth2 = gapi.auth2.init({client_id: clientid, ux_mode: "popup"});
-        auth2.then(function() {
-          // Current values
-          var isSignedIn = auth2.isSignedIn.get();
-          var currentUser = auth2.currentUser.get();
-	  var profile = auth2.currentUser.get().getBasicProfile();
-	  googleUserEmail = profile.getEmail();
+	      	var  clientid = '13872833309-o9hbt87a1ecdhniq8hmtblpllv34bsib.apps.googleusercontent.com'
+	      	var auth2 = gapi.auth2.init({client_id: clientid, ux_mode: "popup"});
+        	auth2.then(function() {
+		  // Current values
+		  var isSignedIn = auth2.isSignedIn.get();
+		  var currentUser = auth2.currentUser.get();
+		  var profile = auth2.currentUser.get().getBasicProfile();
+		  googleUserEmail = profile.getEmail();
 
-	})
+		})
 	    },
 	    onerror: function() {
 	      alert('gapi.client failed');
@@ -153,13 +153,13 @@ if (pSiteID > 0) {
 	      alert('gapi.client timed out');
 	    }
 
-	  })
+	  })   //Endo gapi.load
 
-	  authenticate().then(loadClient);
-	}
-	
-	
+  authenticate().then(loadClient);
 }
+	
+	
+
 
 	
 // Set default parcel layer from Fusion Tables  
