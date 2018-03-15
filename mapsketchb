@@ -492,12 +492,11 @@ var centerControl = new CenterControl(centerControlDiv, map);
 centerControlDiv.index = 1;
 map.controls[google.maps.ControlPosition.TOP_LEFT].push(centerControlDiv);
 
-//if (pSiteID != null  & pSiteID != 'undefined' ) {  //Display Show! only for siteid parameter
-//var rightControlDiv = document.createElement('div');
-//var rightControl = new RightControl(rightControlDiv, map);
-//rightControlDiv.index = 1;
-//map.controls[google.maps.ControlPosition.TOP_RIGHT].push(rightControlDiv);
-//}
+var rightControlDiv = document.createElement('div');
+var rightControl = new RightControl(rightControlDiv, map);
+rightControlDiv.index = 1;
+map.controls[google.maps.ControlPosition.TOP_RIGHT].push(rightControlDiv);
+
 
 }  ///this is end of initialize
 //***************************************************************************************************
