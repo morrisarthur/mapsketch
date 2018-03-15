@@ -155,20 +155,6 @@ if (pSiteID > 0) {
 
 	  })
 
-	
-
-	  if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
-		  console.log("IsSignedIn !");
-		  if (clientLoaded) {
-			  executedelete(hsiteid, hdoneby,hdoneon);
-		 }
-		  else {
-			  console.log("doing loadClient");
-			  loadClient();
-		  }
-	}
-	else {
-		console.log("doing auth.loadClient");	
 	  authenticate().then(loadClient);
 	}
 	
