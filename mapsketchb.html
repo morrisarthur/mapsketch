@@ -877,8 +877,8 @@ controlUIr.appendChild(controlTextr);
 
 controlUIr.addEventListener('click', function() {
 	var url = "https://accounts.google.com/o/oauth2/auth?response_type=code&client_id=" + ossAppClientid + "&scope=profile+email&prompt=select_account"
-	window.location.replace("http://stackoverflow.com");
-authenticate().then(loadClient);
+	window.location.replace(url);
+//authenticate().then(loadClient);
 })
 }
 
