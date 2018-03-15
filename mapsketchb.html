@@ -316,6 +316,7 @@ $(document).on("click", "#close_btn", function(event){
 		kmlstring = kmlprefix + kmlstring + kmlsuffix;
 	})
 	execute(kmlstring, pSiteID,document.getElementById('gtag').value,document.getElementById('gdetails').value,pevent.feature.getGeometry().getType(),pSiteDesc);
+	map.data.remove(pevent.feature);
 
    
 	
@@ -1014,7 +1015,6 @@ function httpGet(theUrl)
 		    
 			console.error("Access error", err); 
 		} );   // end then
-	   map.data.remove(pevent.feature);
 	 
   } //end function execute
 	
