@@ -860,7 +860,7 @@ controlTextr.innerHTML = 'Signin';
 controlUIr.appendChild(controlTextr);
 
 controlUIr.addEventListener('click', function() {
-alert("Signin here");
+authenticate().then(loadClient);
 })
 }
 
