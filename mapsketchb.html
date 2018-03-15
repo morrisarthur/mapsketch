@@ -143,9 +143,10 @@ if (pSiteID > 0) {
 		  var profile = auth2.currentUser.get().getBasicProfile();
 		if (isSignedIn) {
 		   googleUserEmail = profile.getEmail();
+			loadClient();
 		}
 		else {
-			alert("Sign in please")
+//			alert("Sign in please")
 		}
 		
 
