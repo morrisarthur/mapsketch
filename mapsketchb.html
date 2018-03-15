@@ -987,28 +987,23 @@ function httpGet(theUrl)
       "sql": insertsql
     })
         .then(function(response) {
-                // Handle the results here (response.result has the parsed body).
+                // Handle the results here (response.result has the parsed body).   
                 if (response.status = 200) {
-
-	    	alert("New component added. Reload on OK."),
-			map.data.remove(pevent.feature);
-			geoFlayer.setOptions({
-			 query: {
-			   select: 'KmlString',
-			   from: '1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q',
-//			   where:  "Deleted = ''"
-			   where:  "Deleted does not contain 'Y' AND KmlString does not contain '"+new Date().getTime()+"'"				
-			 },
-			 map: map
-			});
+			alert("New component added. Reload on OK."),
+				geoFlayer.setOptions({
+				 query: {
+				   select: 'KmlString',
+				   from: '1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q',
+	//			   where:  "Deleted = ''"
+				   where:  "Deleted does not contain 'Y' AND KmlString does not contain '"+new Date().getTime()+"'"				
+				 },
+				 map: map
+				});
 		}
-	    	else {
+		else {
 			alert("Odd insert response", response.statusText);
 		}
-
-				  
-		
-              },
+	      }, //end function response
               function(err) { 
 			if (err.status = 403) {
 				alert("Insert error: " + err.result.error.message + ". Google user <" + googleUserEmail + "> not authorized(?) Contact WCHD.");
@@ -1018,8 +1013,10 @@ function httpGet(theUrl)
 			}
 		    
 			console.error("Access error", err); 
-		});
-  }
+		}
+	   map.data.remove(pevent.feature);
+	  ) // end then
+  } //end function execute
 	
   function executedelete(esiteid,edoneby,edoneon) {
 	  var doneOn = new Date();
