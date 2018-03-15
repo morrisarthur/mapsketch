@@ -242,6 +242,7 @@ ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="b
 //		  console.log("IsSignedIn !");
 		  if (clientLoaded) {
 			  executedelete(hsiteid, hdoneby,hdoneon);
+			  
 		 }
 		  else {
 			  alert("Not yet ready..try again");
@@ -317,6 +318,7 @@ $(document).on("click", "#close_btn", function(event){
 	})
 	execute(kmlstring, pSiteID,document.getElementById('gtag').value,document.getElementById('gdetails').value,pevent.feature.getGeometry().getType(),pSiteDesc);
 	map.data.remove(pevent.feature);
+	map.data.setDrawingMode();
 
    
 	
