@@ -845,7 +845,7 @@ controlUIr.style.boxShadow = '0 2px 6px rgba(0,0,0,.3)';
 controlUIr.style.cursor = 'pointer';
 controlUIr.style.marginBottom = '22px';
 controlUIr.style.textAlign = 'center';
-controlUIr.title = 'Click to search on GeoID';
+controlUIr.title = 'Google sign-in';
 controlDiv.appendChild(controlUIr);
 
 // Set CSS for the control interior.
@@ -856,36 +856,11 @@ controlTextr.style.fontSize = '16px';
 controlTextr.style.lineHeight = '38px';
 controlTextr.style.paddingLeft = '5px';
 controlTextr.style.paddingRight = '5px';
-controlTextr.innerHTML = 'Show!';
+controlTextr.innerHTML = 'Signin';
 controlUIr.appendChild(controlTextr);
 
 controlUIr.addEventListener('click', function() {
-map.data.toGeoJson(function(data){
-//alert(JSON.stringify(data));
-geoString = JSON.stringify(data);
-polyObj = data
-})
-var pastedGJ = prompt('GeoShapes (copy this):', geoString);
-var total = 0;
-map.data.forEach(function(){ total++; });
-//console.log("total of " + total + " features.");
-
-//gGeo = JSON.stringify(Geo);
-//alert(pGeoDecoded);
-if (pastedGJ != geoString) {
-	    if (confirm("Clear "+ total + " shapes and paste shapes for SiteID "  + pSiteID + " ?") == true) {
-			map.data.forEach(function(feature){map.data.remove(feature)});
-			google.maps.event.removeListener(listenerAddFeature);
-			map.data.addGeoJson(JSON.parse(pastedGJ));
-			map.data.forEach(function(feature){ 
-				total++;
-				feature.setProperty('siteid', pSiteID);
-			});
-			alert( total + " shapes added.");
-		} 
-}
-
-})
+alert("Signin here");
 }
 
 
