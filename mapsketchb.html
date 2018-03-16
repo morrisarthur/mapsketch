@@ -354,6 +354,7 @@ listenerAddFeature = map.data.addListener('addfeature', function(event) {
 //		setProperties(event);
 		// open dialog to prompt for properties
 		document.getElementById('modtitle').innerHTML = "SiteID: " + pSiteID;
+		document.getElementById('modtitle2').innerHTML = "SiteDesc: " + pSiteDesc;
 		$("#myModal").modal({show: true, backdrop: "static"});
 	}
 	else if (gType == "Polygon") {
@@ -367,11 +368,15 @@ listenerAddFeature = map.data.addListener('addfeature', function(event) {
 		//		setProperties(event);
 		// open dialog to prompt for properties
 		document.getElementById('modtitle').innerHTML = "SiteID: " + pSiteID;
+		document.getElementById('modtitle2').innerHTML = "SiteDesc: " + pSiteDesc;
+
 		$("#myModal").modal({show: true, backdrop: "static"});
 	}
 	else {
 		$('#gtag').empty().append('<option value="OSS Connection">OSS Connection</option>');
 		document.getElementById('modtitle').innerHTML = "SiteID: " + pSiteID;
+		document.getElementById('modtitle2').innerHTML = "SiteDesc: " + pSiteDesc;
+
 		$("#myModal").modal({show: true, backdrop: "static"});
 		
 	}
@@ -1151,6 +1156,7 @@ Label.prototype.draw = function() {
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h5 class="modal-title" id="modtitle">GeoShapes</h5>
+          <h5 class="modal-title" id="modtitle2">GeoShapes2</h5>
         </div>
         <div id="mod-input" class="modal-body">
 		<form>
