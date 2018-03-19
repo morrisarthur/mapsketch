@@ -514,7 +514,7 @@ var centerControl = new CenterControl(centerControlDiv, map);
 centerControlDiv.index = 1;
 map.controls[google.maps.ControlPosition.TOP_LEFT].push(centerControlDiv);
 
-if pSiteID > 0 {
+if (pSiteID > 0) {
 	var rightControlDiv = document.createElement('div');
 	var rightControl = new RightControl(rightControlDiv, map);
 	rightControlDiv.index = 1;
