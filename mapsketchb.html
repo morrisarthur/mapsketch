@@ -262,196 +262,196 @@ ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="b
 	
 	
 	
+if (pSiteID > 0) {
+	map.data.setStyle();
+	map.data.setControls(['Point', 'LineString', 'Polygon']);
+	map.data.setControlPosition(google.maps.ControlPosition.TOP_CENTER);
+	map.data.setStyle( {
+		icon: 'https://maps.google.com/mapfiles/marker.png',
+		editable: false,
+	//	icon: {
+	//            path: google.maps.SymbolPath.CIRCLE,
+	//            scale: 5,
+	//			strokeColor: '#ffff00'
+	//			
+	//          },
+	    fillColor: '#ff000020',
+	    strokeColor: '#ff000060',
+	    strokeWeight: 3,
+		fillOpacity: 0.7,
+		strokeOpacity: 0.9
+	  });
 
-map.data.setStyle();
-map.data.setControls(['Point', 'LineString', 'Polygon']);
-map.data.setControlPosition(google.maps.ControlPosition.TOP_CENTER);
-map.data.setStyle( {
-	icon: 'https://maps.google.com/mapfiles/marker.png',
-	editable: false,
-//	icon: {
-//            path: google.maps.SymbolPath.CIRCLE,
-//            scale: 5,
-//			strokeColor: '#ffff00'
-//			
-//          },
-    fillColor: '#ff000020',
-    strokeColor: '#ff000060',
-    strokeWeight: 3,
-	fillOpacity: 0.7,
-	strokeOpacity: 0.9
-  });
-  
-$(document).on("click", "#remove_btn", function(event){
-    map.data.remove(pevent.feature); 
-});
+	$(document).on("click", "#remove_btn", function(event){
+	    map.data.remove(pevent.feature); 
+	});
 
-$(document).on("click", "#close_btn", function(event){
-	var gType = pfeature.getGeometry().getType();
-	var kmlprefix;
-	var kmlsuffix;
-	var jsonprefix;
-	var kmlstring;
-	if (gType == "Point") {
+	$(document).on("click", "#close_btn", function(event){
+		var gType = pfeature.getGeometry().getType();
+		var kmlprefix;
+		var kmlsuffix;
+		var jsonprefix;
+		var kmlstring;
+		if (gType == "Point") {
 
-		kmlprefix = '<Point><coordinates>';
-		kmlsuffix = '</Point>';
-		jsonprefix = '"type":"Feature","geometry":{"type":"Point","coordinates":';
-	}
-	else if (gType == "Polygon") {
-		kmlprefix = '<Polygon><outerBoundaryIs><LinearRing><coordinates>';
-		kmlsuffix = '</coordinates></LinearRing></outerBoundaryIs></Polygon>';
-		jsonprefix = '"type":"Feature","geometry":{"type":"Polygon","coordinates":';
-	}
-	else if (gType == "LineString") {
-		kmlprefix = '<LineString><coordinates>';
-		kmlsuffix = '</coordinates></LineString>';
-		jsonprefix = '"type":"Feature","geometry":{"type":"LineString","coordinates":';
-	}
-	map.data.toGeoJson(function(data){
-		var geoString = JSON.stringify(data);
-		var iprefix =  geoString.lastIndexOf(jsonprefix);
-		kmlstring = geoString.substring(iprefix + jsonprefix.length);
-		kmlstring = kmlstring.slice(0,kmlstring.search("}"));
-		kmlstring =  kmlstring.replace(/\],/g, " ");
-		kmlstring =  kmlstring.replace(/\]/g, "");
-		kmlstring =  kmlstring.replace(/\[/g, "");
-		kmlstring = kmlprefix + kmlstring + kmlsuffix;
-	})
-	execute(kmlstring, pSiteID,document.getElementById('gtag').value,document.getElementById('gdetails').value,pevent.feature.getGeometry().getType(),pSiteDesc);
-	map.data.remove(pevent.feature);
-	map.data.setDrawingMode(null);
-
-   
-	
-});
-	
-//function setProperties(pevent) { 
-$('#myModal').on('hidden.bs.modal', function () {
-
-
-pevent.feature.setProperty('siteid', pSiteID)
-pevent.feature.setProperty('tag', document.getElementById('gtag').value);
-pevent.feature.setProperty('caption', document.getElementById('gdetails').value);
-
-})
-//}
-
-listenerAddFeature = map.data.addListener('addfeature', function(event) {
-	authenticate().then(loadClient)
-	pevent = event;
-	pfeature = event.feature;
-	document.getElementById('gtag').value = "";
-	document.getElementById('gdetails').value = ""
-	var gType = event.feature.getGeometry().getType();
-	if (gType == "Point") {
-		$('#gtag').empty().append('<option value="">---Select Tag---</option>');
-		$('#gtag').append('<option value="Septic Tank">Septic Tank</option>');
-		$('#gtag').append('<option value="Pump Tank">Pump Tank</option>');
-		$('#gtag').append('<option value="Distribution Box">Distribution Box</option>');
-		$('#gtag').append('<option value="Water Intake">Water Intake</option>');
-
-//		setProperties(event);
-		// open dialog to prompt for properties
-		document.getElementById('modtitle').innerHTML = "SiteID: " + pSiteID;
-		document.getElementById('modtitle2').innerHTML = "SiteDesc: " + pSiteDesc;
-		$("#myModal").modal({show: true, backdrop: "static"});
-	}
-	else if (gType == "Polygon") {
-		$('#gtag').empty().append('<option value="">---Select Tag---</option>');
-		$('#gtag').append('<option value="Drainfield">Drainfield</option>');
-		$('#gtag').append('<option value="Sand Filter">Sand Filter</option>');
-		$('#gtag').append('<option value="Building served by OSS">Building served by OSS</option>');
-		$('#gtag').append('<option value="Other Building">Other Building</option>');
-		$('#gtag').append('<option value="Impervious Area">Impervious Area</option>');
-
-		//		setProperties(event);
-		// open dialog to prompt for properties
-		document.getElementById('modtitle').innerHTML = "SiteID: " + pSiteID;
-		document.getElementById('modtitle2').innerHTML = "SiteDesc: " + pSiteDesc;
-
-		$("#myModal").modal({show: true, backdrop: "static"});
-	}
-	else {
-		$('#gtag').empty().append('<option value="OSS Connection">OSS Connection</option>');
-		document.getElementById('modtitle').innerHTML = "SiteID: " + pSiteID;
-		document.getElementById('modtitle2').innerHTML = "SiteDesc: " + pSiteDesc;
-
-		$("#myModal").modal({show: true, backdrop: "static"});
-		
-	}
-	
-	
-	
-	var gaGeom = event.feature.getGeometry();
-	var gaGeomType = gaGeom.getType();
-	var verticesOutside = 0;
-	if (gaGeomType == 'Point')  {
-//		console.log(gaGeom.get().lat());
-		var queryp;
-		var query;
-		var res;
-			queryp = "SELECT Parcel12  FROM " + FT_TableID + " WHERE Parcel12 = '"+ pP12 +"' AND ST_INTERSECTS(Location, CIRCLE(LATLNG(" + gaGeom.get().lat() + "," + gaGeom.get().lng() + "),1))";
-			query = 'https://www.googleapis.com/fusiontables/v2/query?key=AIzaSyDy0O2hjT2-qZe2klgq_wa3Pm6PLFhZMbM&alt=csv&v=3&sql=' + queryp;
-			res = httpGet((query));
-			if (res.search(pP12) > -1) {
-	//			console.log(i + ': intersect ' + pP12)
-			}
-			else {
-				verticesOutside ++;
-			}
-	}
-	else if (gaGeomType == 'LineString') {
-		var queryp;
-		var query;
-		var res;
-//		console.log(gaGeom.getAt(0).lat() + ' ' + gaGeom.getLength());
-		for (var i = 0; i < gaGeom.getLength(); i++) {
-	//		polyString += 'LATLNG(' + tpaths[i].lat() + ', ' + tpaths[i].lng() + '),'
-			queryp = "SELECT Parcel12  FROM " + FT_TableID + " WHERE Parcel12 = '"+ pP12 +"' AND ST_INTERSECTS(Location, CIRCLE(LATLNG(" + gaGeom.getAt(i).lat() + "," + gaGeom.getAt(i).lng() + "),1))";
-			query = 'https://www.googleapis.com/fusiontables/v2/query?key=AIzaSyDy0O2hjT2-qZe2klgq_wa3Pm6PLFhZMbM&alt=csv&v=3&sql=' + queryp;
-	//		console.log(queryp);
-					res = httpGet((query));
-	//		console.log(res.search(pP12))
-			if (res.search(pP12) > -1) {
-	//			console.log(i + ': intersect ' + pP12)
-			}
-			else {
-				verticesOutside ++;
-			}
-	}
-
-	
-		
-	}
-	else if (gaGeomType == 'Polygon')  {
-		var tpaths = gaGeom.getAt(0).getArray();
-		var queryp;
-		var query;
-		var res;
-		for (var i = 0; i < tpaths.length; i++) {
-	//		polyString += 'LATLNG(' + tpaths[i].lat() + ', ' + tpaths[i].lng() + '),'
-			queryp = "SELECT Parcel12  FROM " + FT_TableID + " WHERE Parcel12 = '"+ pP12 +"' AND ST_INTERSECTS(Location, CIRCLE(LATLNG(" + tpaths[i].lat() + "," + tpaths[i].lng() + "),1))";
-			query = 'https://www.googleapis.com/fusiontables/v2/query?key=AIzaSyDy0O2hjT2-qZe2klgq_wa3Pm6PLFhZMbM&alt=csv&v=3&sql=' + queryp;
-	//		console.log(queryp);
-					res = httpGet((query));
-	//		console.log(res.search(pP12))
-			if (res.search(pP12) > -1) {
-	//			console.log(i + ': intersect ' + pP12)
-			}
-			else {
-				verticesOutside ++;
-			}	
-	}
-	}
-	if (verticesOutside > 0) {
-		alert(verticesOutside + ' Alert: Part of sketch is outside target parcel ' + pP12);
+			kmlprefix = '<Point><coordinates>';
+			kmlsuffix = '</Point>';
+			jsonprefix = '"type":"Feature","geometry":{"type":"Point","coordinates":';
 		}
-	
+		else if (gType == "Polygon") {
+			kmlprefix = '<Polygon><outerBoundaryIs><LinearRing><coordinates>';
+			kmlsuffix = '</coordinates></LinearRing></outerBoundaryIs></Polygon>';
+			jsonprefix = '"type":"Feature","geometry":{"type":"Polygon","coordinates":';
+		}
+		else if (gType == "LineString") {
+			kmlprefix = '<LineString><coordinates>';
+			kmlsuffix = '</coordinates></LineString>';
+			jsonprefix = '"type":"Feature","geometry":{"type":"LineString","coordinates":';
+		}
+		map.data.toGeoJson(function(data){
+			var geoString = JSON.stringify(data);
+			var iprefix =  geoString.lastIndexOf(jsonprefix);
+			kmlstring = geoString.substring(iprefix + jsonprefix.length);
+			kmlstring = kmlstring.slice(0,kmlstring.search("}"));
+			kmlstring =  kmlstring.replace(/\],/g, " ");
+			kmlstring =  kmlstring.replace(/\]/g, "");
+			kmlstring =  kmlstring.replace(/\[/g, "");
+			kmlstring = kmlprefix + kmlstring + kmlsuffix;
+		})
+		execute(kmlstring, pSiteID,document.getElementById('gtag').value,document.getElementById('gdetails').value,pevent.feature.getGeometry().getType(),pSiteDesc);
+		map.data.remove(pevent.feature);
+		map.data.setDrawingMode(null);
 
 
-});  //end of add listener add feature
 
+	});
+
+	//function setProperties(pevent) { 
+	$('#myModal').on('hidden.bs.modal', function () {
+
+
+	pevent.feature.setProperty('siteid', pSiteID)
+	pevent.feature.setProperty('tag', document.getElementById('gtag').value);
+	pevent.feature.setProperty('caption', document.getElementById('gdetails').value);
+
+	})
+	//}
+
+	listenerAddFeature = map.data.addListener('addfeature', function(event) {
+		authenticate().then(loadClient)
+		pevent = event;
+		pfeature = event.feature;
+		document.getElementById('gtag').value = "";
+		document.getElementById('gdetails').value = ""
+		var gType = event.feature.getGeometry().getType();
+		if (gType == "Point") {
+			$('#gtag').empty().append('<option value="">---Select Tag---</option>');
+			$('#gtag').append('<option value="Septic Tank">Septic Tank</option>');
+			$('#gtag').append('<option value="Pump Tank">Pump Tank</option>');
+			$('#gtag').append('<option value="Distribution Box">Distribution Box</option>');
+			$('#gtag').append('<option value="Water Intake">Water Intake</option>');
+
+	//		setProperties(event);
+			// open dialog to prompt for properties
+			document.getElementById('modtitle').innerHTML = "SiteID: " + pSiteID;
+			document.getElementById('modtitle2').innerHTML = "SiteDesc: " + pSiteDesc;
+			$("#myModal").modal({show: true, backdrop: "static"});
+		}
+		else if (gType == "Polygon") {
+			$('#gtag').empty().append('<option value="">---Select Tag---</option>');
+			$('#gtag').append('<option value="Drainfield">Drainfield</option>');
+			$('#gtag').append('<option value="Sand Filter">Sand Filter</option>');
+			$('#gtag').append('<option value="Building served by OSS">Building served by OSS</option>');
+			$('#gtag').append('<option value="Other Building">Other Building</option>');
+			$('#gtag').append('<option value="Impervious Area">Impervious Area</option>');
+
+			//		setProperties(event);
+			// open dialog to prompt for properties
+			document.getElementById('modtitle').innerHTML = "SiteID: " + pSiteID;
+			document.getElementById('modtitle2').innerHTML = "SiteDesc: " + pSiteDesc;
+
+			$("#myModal").modal({show: true, backdrop: "static"});
+		}
+		else {
+			$('#gtag').empty().append('<option value="OSS Connection">OSS Connection</option>');
+			document.getElementById('modtitle').innerHTML = "SiteID: " + pSiteID;
+			document.getElementById('modtitle2').innerHTML = "SiteDesc: " + pSiteDesc;
+
+			$("#myModal").modal({show: true, backdrop: "static"});
+
+		}
+
+
+
+		var gaGeom = event.feature.getGeometry();
+		var gaGeomType = gaGeom.getType();
+		var verticesOutside = 0;
+		if (gaGeomType == 'Point')  {
+	//		console.log(gaGeom.get().lat());
+			var queryp;
+			var query;
+			var res;
+				queryp = "SELECT Parcel12  FROM " + FT_TableID + " WHERE Parcel12 = '"+ pP12 +"' AND ST_INTERSECTS(Location, CIRCLE(LATLNG(" + gaGeom.get().lat() + "," + gaGeom.get().lng() + "),1))";
+				query = 'https://www.googleapis.com/fusiontables/v2/query?key=AIzaSyDy0O2hjT2-qZe2klgq_wa3Pm6PLFhZMbM&alt=csv&v=3&sql=' + queryp;
+				res = httpGet((query));
+				if (res.search(pP12) > -1) {
+		//			console.log(i + ': intersect ' + pP12)
+				}
+				else {
+					verticesOutside ++;
+				}
+		}
+		else if (gaGeomType == 'LineString') {
+			var queryp;
+			var query;
+			var res;
+	//		console.log(gaGeom.getAt(0).lat() + ' ' + gaGeom.getLength());
+			for (var i = 0; i < gaGeom.getLength(); i++) {
+		//		polyString += 'LATLNG(' + tpaths[i].lat() + ', ' + tpaths[i].lng() + '),'
+				queryp = "SELECT Parcel12  FROM " + FT_TableID + " WHERE Parcel12 = '"+ pP12 +"' AND ST_INTERSECTS(Location, CIRCLE(LATLNG(" + gaGeom.getAt(i).lat() + "," + gaGeom.getAt(i).lng() + "),1))";
+				query = 'https://www.googleapis.com/fusiontables/v2/query?key=AIzaSyDy0O2hjT2-qZe2klgq_wa3Pm6PLFhZMbM&alt=csv&v=3&sql=' + queryp;
+		//		console.log(queryp);
+						res = httpGet((query));
+		//		console.log(res.search(pP12))
+				if (res.search(pP12) > -1) {
+		//			console.log(i + ': intersect ' + pP12)
+				}
+				else {
+					verticesOutside ++;
+				}
+		}
+
+
+
+		}
+		else if (gaGeomType == 'Polygon')  {
+			var tpaths = gaGeom.getAt(0).getArray();
+			var queryp;
+			var query;
+			var res;
+			for (var i = 0; i < tpaths.length; i++) {
+		//		polyString += 'LATLNG(' + tpaths[i].lat() + ', ' + tpaths[i].lng() + '),'
+				queryp = "SELECT Parcel12  FROM " + FT_TableID + " WHERE Parcel12 = '"+ pP12 +"' AND ST_INTERSECTS(Location, CIRCLE(LATLNG(" + tpaths[i].lat() + "," + tpaths[i].lng() + "),1))";
+				query = 'https://www.googleapis.com/fusiontables/v2/query?key=AIzaSyDy0O2hjT2-qZe2klgq_wa3Pm6PLFhZMbM&alt=csv&v=3&sql=' + queryp;
+		//		console.log(queryp);
+						res = httpGet((query));
+		//		console.log(res.search(pP12))
+				if (res.search(pP12) > -1) {
+		//			console.log(i + ': intersect ' + pP12)
+				}
+				else {
+					verticesOutside ++;
+				}	
+		}
+		}
+		if (verticesOutside > 0) {
+			alert(verticesOutside + ' Alert: Part of sketch is outside target parcel ' + pP12);
+			}
+
+
+
+	});  //end of add listener add feature
+} // end if pSiteID > 0 for drawing controls
 
 
   google.maps.LatLng.prototype.kmTo = function(a){ 
@@ -514,11 +514,12 @@ var centerControl = new CenterControl(centerControlDiv, map);
 centerControlDiv.index = 1;
 map.controls[google.maps.ControlPosition.TOP_LEFT].push(centerControlDiv);
 
-var rightControlDiv = document.createElement('div');
-var rightControl = new RightControl(rightControlDiv, map);
-rightControlDiv.index = 1;
-map.controls[google.maps.ControlPosition.TOP_RIGHT].push(rightControlDiv);
-
+if pSiteID > 0 {
+	var rightControlDiv = document.createElement('div');
+	var rightControl = new RightControl(rightControlDiv, map);
+	rightControlDiv.index = 1;
+	map.controls[google.maps.ControlPosition.TOP_RIGHT].push(rightControlDiv);
+} //end pSiteID > 0 for showing signout
 
 }  ///this is end of initialize
 //***************************************************************************************************
