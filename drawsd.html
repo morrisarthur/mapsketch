@@ -124,7 +124,7 @@ map.setTilt(0);
 // Get URL parameter
 pP12 = getAllUrlParams().p;
 pSiteID = getAllUrlParams().s;
-alert('hey'+pP12);
+
 if (pSiteID > 0) {
 	gapi.load("client:auth2", {
 	    callback: function() {
@@ -353,7 +353,7 @@ listenerAddFeature = map.data.addListener('addfeature', function(event) {
   } 	 
 
 
-
+console.log('<'+pP12+'>');
 if (pP12 == null  || pP12 == 'undefined' ) { ///Called without P12 parameter
 	// Try HTML5 geolocation.
 	 ////Zoom to current location (Still initiale-ing)
