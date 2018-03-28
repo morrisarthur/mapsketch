@@ -474,7 +474,7 @@ if (pSiteID > 0) {
 
 
 console.log("p" + pP12 + "p");
-if (pP12 == null  || pP12 == 'undefined' ) { ///Called without P12 parameter
+if (pP12 == null  || pP12 == 'undefined' || pP12 == '' ) { ///Called without P12 parameter
 	// Try HTML5 geolocation.
 	 ////Zoom to current location (Still initiale-ing)
 	var infoWindow = new google.maps.InfoWindow;
