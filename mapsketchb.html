@@ -308,9 +308,11 @@ if (pSiteID > 0) {
 			kmlsuffix = '</coordinates></LineString>';
 			jsonprefix = '"type":"Feature","geometry":{"type":"LineString","coordinates":';
 		}
+		console.log("^^:"+geoString);
 		map.data.toGeoJson(function(data){
 			var geoString = JSON.stringify(data);
 			var iprefix =  geoString.lastIndexOf(jsonprefix);
+		console.log("^^^:"+geoString);
 			kmlstring = geoString.substring(iprefix + jsonprefix.length);
 			kmlstring = kmlstring.slice(0,kmlstring.search("}"));
 			kmlstring =  kmlstring.replace(/\],/g, " ");
