@@ -195,6 +195,7 @@ $(document).on("click", "#close_btn", function(event){
 		kmlsuffix = '</coordinates></LineString>';
 		jsonprefix = '"type":"Feature","geometry":{"type":"LineString","coordinates":';
 	}
+	console.log("before toGeoJson"+kmlprefix)
 	map.data.toGeoJson(function(data){
 		var geoString = JSON.stringify(data);
 		var iprefix =  geoString.lastIndexOf(jsonprefix);
@@ -204,6 +205,7 @@ $(document).on("click", "#close_btn", function(event){
 		kmlstring =  kmlstring.replace(/\]/g, "");
 		kmlstring =  kmlstring.replace(/\[/g, "");
 		kmlstring = kmlprefix + kmlstring + kmlsuffix;
+			console.log("in toGeoJson"+kmlstring)
 	})
 	console.log("before execute"+kmlstring)
 	execute(kmlstring, pSiteID,document.getElementById('gtag').value,document.getElementById('gdetails').value,pevent.feature.getGeometry().getType());
