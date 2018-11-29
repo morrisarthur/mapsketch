@@ -312,14 +312,16 @@ if (pSiteID > 0) {
 		map.data.toGeoJson(function(data){
 		console.log("^^:"+data);
 			var geoString = JSON.stringify(data);
+			console.log("^^^:"+geoString);
 			var iprefix =  geoString.lastIndexOf(jsonprefix);
-		console.log("^^^:"+geoString);
+		
 			kmlstring = geoString.substring(iprefix + jsonprefix.length);
 			kmlstring = kmlstring.slice(0,kmlstring.search("}"));
 			kmlstring =  kmlstring.replace(/\],/g, " ");
 			kmlstring =  kmlstring.replace(/\]/g, "");
 			kmlstring =  kmlstring.replace(/\[/g, "");
 			kmlstring = kmlprefix + kmlstring + kmlsuffix;
+			console.log("kmlstring:" + kmlstring);
 		})
 		execute(kmlstring, pSiteID,document.getElementById('gtag').value,document.getElementById('gdetails').value,pevent.feature.getGeometry().getType(),pSiteDesc);
 		map.data.remove(pevent.feature);
