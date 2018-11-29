@@ -1000,9 +1000,10 @@ function httpGet(theUrl)
       "sql": insertsql
     })
         .then(function(response) {
-                // Handle the results here (response.result has the parsed body).   
+                // Handle the results here (response.result has the parsed body).
+	    console.log(insertsql)
                 if (response.status = 200) {
-			alert("New component added. Reload on OK."),
+			alert("New component farted. Reload on OK."),
 				geoFlayer.setOptions({
 				 query: {
 				   select: 'KmlString',
