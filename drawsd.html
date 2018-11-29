@@ -205,6 +205,7 @@ $(document).on("click", "#close_btn", function(event){
 		kmlstring =  kmlstring.replace(/\[/g, "");
 		kmlstring = kmlprefix + kmlstring + kmlsuffix;
 	})
+	console.log("before execute"+kmlstring)
 	execute(kmlstring, pSiteID,document.getElementById('gtag').value,document.getElementById('gdetails').value,pevent.feature.getGeometry().getType());
 
    
