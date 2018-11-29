@@ -999,6 +999,7 @@ function httpGet(theUrl)
 	  if (pIcon == "w") {
 		  pIcon = "w_blue"
 	  }
+	  console.log('"fkml: " + fkml);
     insertsql = "Insert Into 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q (fFillColor, fBorderColor, Icon, DoneBy, DoneOn, KmlString,siteid,fName,fDescription,fType,SiteDesc) VALUES ('#ff000020','#ff000060','" + pIcon + "','" + googleUserEmail + "','" + doneOn.toLocaleString("en-US") + "','" + fkml + "'," + fpsiteid + ", '" + ffName  + "', '" + ffDescription + "', '" + ffType + "', '" + fSiteDesc.replace(/['"]/g, "") + "')";
 //    console.log('sqlsent: ' + insertsql)   
     return gapi.client.fusiontables.query.sql({
