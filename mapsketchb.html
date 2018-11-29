@@ -322,11 +322,12 @@ if (pSiteID > 0) {
 			kmlstring =  kmlstring.replace(/\[/g, "");
 			kmlstring = kmlprefix + kmlstring + kmlsuffix;
 			console.log("kmlstring:" + kmlstring);
+			console.log("kmlstring 2" + kmlstring);
+			execute(kmlstring, pSiteID,document.getElementById('gtag').value,document.getElementById('gdetails').value,pevent.feature.getGeometry().getType(),pSiteDesc);
+			map.data.remove(pevent.feature);
+			map.data.setDrawingMode(null);
 		})
-		console.log("kmlstring 2" + kmlstring);
-		execute(kmlstring, pSiteID,document.getElementById('gtag').value,document.getElementById('gdetails').value,pevent.feature.getGeometry().getType(),pSiteDesc);
-		map.data.remove(pevent.feature);
-		map.data.setDrawingMode(null);
+
 
 
 
