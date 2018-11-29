@@ -986,6 +986,7 @@ function httpGet(theUrl)
       "sql": insertsql
     })
         .then(function(response) {
+	    console.log(insertsql)
                 // Handle the results here (response.result has the parsed body).
                 if (response.status = 200) {
 
