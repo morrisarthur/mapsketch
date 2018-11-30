@@ -241,7 +241,7 @@ ftinfoWindow.setContent(e.infoWindowHtml + '<div align="right" > <input  type="b
 	var hdoneon = hstr.substring(pos,endpos).trim();
 	  ftinfoWindow.close();
 	  if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
-//		  console.log("IsSignedIn !");
+//		  console.log("IsSignedIn...");
 		  if (clientLoaded) {
 			  executedelete(hsiteid, hdoneby,hdoneon);
 			  
@@ -292,7 +292,7 @@ if (pSiteID > 0) {
 		var kmlsuffix;
 		var jsonprefix;
 		var kmlstring;
-		console.log("gType = " + gType);
+
 		if (gType == "Point") {
 
 			kmlprefix = '<Point><coordinates>';
@@ -310,9 +310,8 @@ if (pSiteID > 0) {
 			jsonprefix = '"type":"Feature","geometry":{"type":"LineString","coordinates":';
 		}
 		map.data.toGeoJson(function(data){
-		console.log("^^:"+data);
+
 			var geoString = JSON.stringify(data);
-			console.log("^^^:"+geoString);
 			var iprefix =  geoString.lastIndexOf(jsonprefix);
 		
 			kmlstring = geoString.substring(iprefix + jsonprefix.length);
@@ -321,8 +320,6 @@ if (pSiteID > 0) {
 			kmlstring =  kmlstring.replace(/\]/g, "");
 			kmlstring =  kmlstring.replace(/\[/g, "");
 			kmlstring = kmlprefix + kmlstring + kmlsuffix;
-			console.log("kmlstring:" + kmlstring);
-			console.log("kmlstring 2" + kmlstring);
 			execute(kmlstring, pSiteID,document.getElementById('gtag').value,document.getElementById('gdetails').value,pevent.feature.getGeometry().getType(),pSiteDesc);
 			map.data.remove(pevent.feature);
 			map.data.setDrawingMode(null);
@@ -480,7 +477,7 @@ if (pSiteID > 0) {
   } 	 
 
 
-console.log("p" + pP12 + "p");
+//console.log("p" + pP12 + "p");
 if (pP12 == null  || pP12 == 'undefined' || pP12 == '' ) { ///Called without P12 parameter
 	// Try HTML5 geolocation.
 	 ////Zoom to current location (Still initiale-ing)
@@ -977,7 +974,7 @@ function httpGet(theUrl)
     return gapi.auth2.getAuthInstance()
         .signIn({scope: "https://www.googleapis.com/auth/fusiontables https://www.googleapis.com/auth/fusiontables.readonly"})
         .then(function() { 
-	    console.log("Sign-in successful");
+	    console.log("Sign-in successful..");
     		},
           function(err) { console.error("Error signing in", err); });
 	updateSigninStatus(gapi.auth2.getAuthInstance().isSignedIn.get());
@@ -989,7 +986,7 @@ function httpGet(theUrl)
     return gapi.client.load("https://content.googleapis.com/discovery/v1/apis/fusiontables/v2/rest")
         .then(function() { 
 	    clientLoaded = true;
-	    console.log("GAPI client loaded for API"); 
+//	    console.log("GAPI client loaded for API"); 
     	},
               function(err) { console.error("Error loading GAPI client for API", err); });
   }
@@ -1001,7 +998,7 @@ function httpGet(theUrl)
 	  if (pIcon == "w") {
 		  pIcon = "w_blue"
 	  }
-	  console.log("fkml: " + fkml);
+//	  console.log("fkml: " + fkml);
     insertsql = "Insert Into 1LU88bmDYYYzRUHzLTAKK4jjLJo8SLvJKPy55yA-q (fFillColor, fBorderColor, Icon, DoneBy, DoneOn, KmlString,siteid,fName,fDescription,fType,SiteDesc) VALUES ('#ff000020','#ff000060','" + pIcon + "','" + googleUserEmail + "','" + doneOn.toLocaleString("en-US") + "','" + fkml + "'," + fpsiteid + ", '" + ffName  + "', '" + ffDescription + "', '" + ffType + "', '" + fSiteDesc.replace(/['"]/g, "") + "')";
 //    console.log('sqlsent: ' + insertsql)   
     return gapi.client.fusiontables.query.sql({
