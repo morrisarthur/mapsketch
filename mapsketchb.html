@@ -502,7 +502,7 @@ if (pP12 == null  || pP12 == 'undefined' || pP12 == '' ) { ///Called without P12
 	  handleLocationError(false, infoWindow, map.getCenter());
 	}
 }
-else if (pSiteID > 0)  {   ///Zoom to parcel indicated by pP12
+else if (pSiteID > 0)  {   ///Zoom to septic tank if site search
 	sCompType = 'Septic Tank';
 	gotoSite(sCompType);
 }
@@ -544,6 +544,7 @@ query.send(zoomToSite);
 }
 
 function zoomToSite(response) {
+	console.log("response from zoomToSite: ", response);
   if (!response) {
     alert('no response');
     return;
